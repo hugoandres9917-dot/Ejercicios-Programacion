@@ -1,0 +1,113 @@
+Ejercicios
+
+1. Cree un algoritmo para ver un video en YouTube. Sea lo más especifico posible.
+
+Respuesta:
+
+1. Inicio.
+
+2. buscar Video en YouTube.
+
+ a. puedo buscarlo en mi celular o computadora.
+
+3. Si busco el video desde mi celular.
+
+i. voy a la  aplicación a reproducirlo.
+
+Sino:
+
+ii.   lo busco en la computadora, Buscador de internet escribo en la barra de búsqueda “youtube.com” a reproducirlo y busco el video.
+
+4. ver video.
+
+5. Fin
+
+2. Cree un algoritmo que describa su rutina diaria. Use condiciones, condiciones múltiples y ciclos.
+
+Respuesta:
+
+1. Inicio.
+
+2. Me despierto, me lavo cara`y` dientes.
+
+3. Preparo el café `y` desayuno.
+
+a. poner agua `y`café en coffemaker.
+
+b. enciendo el coffemaker.
+
+4. `Si` hay café.
+
+      i. lo preparo.
+
+`Sino:`
+
+ii. ir al super a traer café.
+
+5. Mientras no este listo el café:
+
+i. Si hay pan.
+
+a. preparo el pan.
+
+ii. Sino:
+
+a. preparo un pinto.
+
+6.  a desayunar.
+
+7. luego salgo a caminar con mis perros.
+
+8. Si, No esta lloviendo.
+
+   i. salimos de paseo.
+
+Sino:
+
+    ii. si llueve negativo con la salida.
+
+9. tomar un baño.
+
+10. preparar algo para el almuerzo y cena.
+
+11. Mientras no este listo:
+
+i. Si NO esta listo.
+
+a. lo preparo y como.
+
+ii. Sino:
+
+a. caliento lo ya preparado y como.
+
+12. conectarme a clases o  trabajo /12 pm a 8 pm
+
+13. Si enciende la computadora`y` hay buen internet `y` luz eléctrica: 
+
+     i. conectarse y con todo.
+
+Sino:
+
+ii. Buscar un lugar donde lo pueda hacer.
+
+14. a las 8 pm la cena.
+
+     a. se calienta la comida preparada.
+
+b. se sirven los vasos y el fresco.
+
+c. se sirven los cubiertos.
+
+15.Nos vamos preparando para dormir.
+
+a. nos lavamos los dientes.
+
+b. preparamos la cama.
+
+ c. apagamos el celular.
+
+ d. vemos un rato tv y leer una reflexión.
+
+16. a descansar.
+
+17. Fin.
