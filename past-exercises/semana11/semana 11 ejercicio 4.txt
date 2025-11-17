@@ -1,0 +1,11 @@
+#semana 11 ejercicio 4
+
+class Head:
+    def __init__(self, eyes, nose, mounth, ears,):
+        self.eyes = eyes
+        self.nose = nose
+        self.mounth = mounth
+        self.ears = ears
+
+
+        
