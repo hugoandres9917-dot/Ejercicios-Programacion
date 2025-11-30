@@ -1,10 +1,10 @@
 #ejercicio 2 semana 12
 
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 import math
 
 class Shape(ABC):
-    @abstractclassmethod
+    @abstractmethod
     def calculate_perimeter(self):
         pass
 
