@@ -3,8 +3,8 @@
 
 
 def print_numbers_times_2(numbers_list):
-	for number in numbers_list:# 0(n)
-		print(number * 2)#0(n)
+	for number in numbers_list:# 0(1)
+		print(number * 2)#0(1)
 		
 
 def check_if_lists_have_an_equal(list_a, list_b):
@@ -21,10 +21,10 @@ def print_10_or_less_elements(list_to_print):
 		print(list_to_print[index])#0(1)
 		
 def generate_list_trios(list_a, list_b, list_c):
-	result_list = []#0(1)
+	result_list = []#0(n)
 	for element_a in list_a:#0(n)
 		for element_b in list_b:#0(n^2)
 			for element_c in list_c:#0(n^3)
-				result_list.append(f'{element_a} {element_b} {element_c}')#0(1)
+				result_list.append(f'{element_a} {element_b} {element_c}')#0(n)
 				
-	return result_list #0(1)
+	return result_list #0(n)
