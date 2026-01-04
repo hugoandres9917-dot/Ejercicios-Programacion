@@ -18,7 +18,7 @@ def bubble_sort(list_to_sort):
         if not swapped:#O(n)
             break #o(n)
 
-my_testing_list  = [1,2,3,4,5,6,7,8,9,0 ] #0(n)
+my_testing_list  = [1,0,2,3,4,5,6,7,8,9 ] #0(n)
 bubble_sort(my_testing_list) #0(n)
 
 print(my_testing_list)# 0(n)
