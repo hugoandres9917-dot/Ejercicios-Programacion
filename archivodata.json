@@ -1,0 +1,14 @@
+{
+    "categories": [
+        "gasolina",
+        "comida",
+        "582"
+    ],
+    "movements": [
+        {
+            "Monto": 200.0,
+            "Categoria": "comida",
+            "Tipo": "Gasto"
+        }
+    ]
+}
