@@ -29,5 +29,8 @@ def save_data(categories, movements):
         "categories": categories,
         "movements": movements
     }
-    with open(DATA_FILE, "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=4, ensure_ascii=False)
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error al guardar los datos: {e}")   

@@ -1,14 +1,8 @@
 {
     "categories": [
-        "gasolina",
-        "comida",
+        "Gasolina",
+        "Comida",
         "582"
     ],
-    "movements": [
-        {
-            "Monto": 200.0,
-            "Categoria": "comida",
-            "Tipo": "Gasto"
-        }
-    ]
+    "movements": []
 }
