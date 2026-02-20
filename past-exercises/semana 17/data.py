@@ -27,8 +27,21 @@ def load_data():
 def save_data(categories, movements):
     data = {
         "categories": categories,
-        "movements": movements
+        "movements": []
     }
+    for m in movements:
+                if isinstance(m, dict):
+                    data["movements"].append(m)
+                else:
+                    data["movements"].append({                
+                        "Titulo": m.title,
+                        "Monto": m.amount,
+                        "Categoria": m.category.name,
+                        "Tipo": m.type,
+                        "Fecha": m.date.strftime("%Y-%m-%d %H:%M:%S"),
+                        "Metodo de Pago": m.payment_method,
+                        "Notas": m.notes
+            }) 
     try:
         with open(DATA_FILE, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4, ensure_ascii=False)

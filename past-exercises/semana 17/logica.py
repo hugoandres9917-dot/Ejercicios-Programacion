@@ -1,9 +1,9 @@
 
-from datetime import datetime
 import uuid
+from datetime import date, datetime
 
 
-#organizar categorias en clase
+#Clase para categorias
 
 class Category:
     def __init__(self, name: str):
@@ -18,7 +18,8 @@ class Category:
 #clase para movimientos financieros
 
 class Movement:
-    def __init__(self, title: str, amount: float, category: Category, is_income: bool, payment_method: str = "Efectivo", notes: str = ""):
+    def __init__(self, title: str, amount: float, category: Category, is_income: bool, 
+                payment_method: str = "Efectivo", notes: str = "", date=None):
         self.id = str(uuid.uuid4())[:8] 
         self.title = title.strip().title()
         self.amount = amount
@@ -26,20 +27,31 @@ class Movement:
         self.type = "Ingreso" if is_income else "Gasto"
         self.payment_method = payment_method
         self.notes = notes
-        self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if date is None:
+            self.date = datetime.now()
+        elif isinstance(date, str):
+            try:
+                self.date = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                raise ValueError("La fecha debe tener el formato 'YYYY-MM-DD HH:MM:SS'")
+        elif isinstance(date, datetime):
+            self.date = date
+        else:
+            raise ValueError("La fecha debe ser un objeto datetime o una cadena con formato 'YYYY-MM-DD HH:MM:SS'")
 
     def to_row(self):
         return [ 
             self.title,
             f"{self.amount:,.2f}",
-            self.category,
+            self.category.name,
             self.type,
             self.date.strftime("%Y-%m-%d %H:%M:%S"),
             self.payment_method,
             self.notes
         ]
     def __repr__(self):
-        return f"Movimiento({self.title}, {self.amount}, {self.category.name}, {self.type}, {self.date})"
+        return f"Movimiento({self.title}, {self.amount}, {self.category.name}, {self.type}, {self.date.strftime('%Y-%m-%d %H:%M:%S')}, {self.payment_method}, {self.notes})"
 
 #clase gestor financiero
 
@@ -50,21 +62,24 @@ class FinanceManager:
 
     def add_category(self, name: str):
         if name.title() in self.categories:
-            return False, "La categoria ya existe"
+            return False, f"La categoria '{name.title()}' ya existe"
         try:
             category = Category(name)
             self.categories[category.name] = category
-            return True, "Categoria agregada exitosamente"  
+            return True, f"Categoria '{category.name}' agregada exitosamente"  
         except ValueError as e:
             return False, str(e)
 
-    def add_movement(self, title: str, amount: float, category_name: str, is_income: bool, payment_method: str = "Efectivo", notes: str = ""):
+    def add_movement(self, title: str, amount: float, category_name: str, is_income: bool,
+                        payment_method: str = "Efectivo", notes: str = "", date=None):
         if category_name not in self.categories:
             return False, "Debe seleccionar una categoria valida"
+        if amount <= 0:
+            return False, "El monto debe ser un número positivo."
         try:
-            movement = Movement(title, amount, self.categories[category_name], is_income, payment_method, notes)
+            movement = Movement(title, amount, self.categories[category_name], is_income, payment_method, notes, date)
             self.movements.append(movement)
-            return True, "Movimiento agregado exitosamente"
+            return True, f"Movimiento '{movement.title}' agregado exitosamente"
         except ValueError as e:
             return False, str(e)
 
