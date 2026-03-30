@@ -28,86 +28,87 @@ Respuesta:
 
 1. Inicio.
 
-2. Me despierto, me lavo cara`y` dientes.
+2. Despertar y aseo
+	. Me despierto.
+	. Me lavo la cara y los dientes.
 
 3. Preparo el café `y` desayuno.
 
-a. poner agua `y`café en coffemaker.
+	. poner agua `y`café en coffemaker.
 
-b. enciendo el coffemaker.
+	. enciendo el coffemaker.
 
-4. `Si` hay café.
+	.`Si` hay café.
+		. lo preparo.
+	. sino:
+		. ir al super a comprar cafe
 
-      i. lo preparo.
+	. Mientras no este listo el café:
 
-`Sino:`
+		. Si hay pan.
+			. preparo el pan.
 
-ii. ir al super a traer café.
+		. Sino:
 
-5. Mientras no este listo el café:
+			. preparo un pinto.
 
-i. Si hay pan.
+4. Desayunar.
 
-a. preparo el pan.
+5. luego salgo a caminar con mis perros.
 
-ii. Sino:
+	. Si, No esta lloviendo.
 
-a. preparo un pinto.
+   		. salimos de paseo.
 
-6.  a desayunar.
+	. Sino:
 
-7. luego salgo a caminar con mis perros.
+    		. si llueve negativo con la salida.
 
-8. Si, No esta lloviendo.
+6. Baño.
 
-   i. salimos de paseo.
+7. preparar algo para el almuerzo y cena.
 
-Sino:
+	. Mientras no este listo:
 
-    ii. si llueve negativo con la salida.
+		. Si NO esta listo.
 
-9. tomar un baño.
+			. lo preparo y como.
 
-10. preparar algo para el almuerzo y cena.
+		. Sino:
 
-11. Mientras no este listo:
+			. caliento lo ya preparado y como.
 
-i. Si NO esta listo.
+8. conectarme a clases o  trabajo /12 pm a 8 pm
 
-a. lo preparo y como.
+	. Si enciende la computadora`y` hay buen internet `y` luz 	eléctrica: 
 
-ii. Sino:
+     		. conectarse y con todo.
 
-a. caliento lo ya preparado y como.
+	Sino:
 
-12. conectarme a clases o  trabajo /12 pm a 8 pm
+		. Buscar un lugar donde lo pueda hacer.
 
-13. Si enciende la computadora`y` hay buen internet `y` luz eléctrica: 
+9. a las 8 pm la cena.
+	. se calienta la comida preparada.
 
-     i. conectarse y con todo.
+	. se sirven los vasos y el fresco.
 
-Sino:
+	. se sirven los cubiertos.
+10 lavar ropa
+	. mientras haya ropa sucia
+		lavar ropa
+	. finMinetras
 
-ii. Buscar un lugar donde lo pueda hacer.
+11.Nos vamos preparando para dormir.
 
-14. a las 8 pm la cena.
+	. nos lavamos los dientes.
 
-     a. se calienta la comida preparada.
+	. preparamos la cama.
 
-b. se sirven los vasos y el fresco.
+ 	. apagamos el celular.
 
-c. se sirven los cubiertos.
+ 	. vemos un rato tv y leer una reflexión.
 
-15.Nos vamos preparando para dormir.
+12.  descansar.
 
-a. nos lavamos los dientes.
-
-b. preparamos la cama.
-
- c. apagamos el celular.
-
- d. vemos un rato tv y leer una reflexión.
-
-16. a descansar.
-
-17. Fin.
+13. Fin.
