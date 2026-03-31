@@ -1,0 +1,106 @@
+Algoritmo extra 1
+Fiesta SORPRESA
+
+1. Inicio
+	. Definir: persona homenajeada, lugar de la fiesta, lista de 	invitados, hora de llegada.
+2. verificar ubicacion del cumpleaños
+	. si esta en la casa:
+		. Buscar forma de sacarlo con una excusa
+	. si no esta en casa:
+		. Countinuar con la preparacion del lugar
+3. Preparacion del lugar
+	. Decorar con globos, pancartas, luces
+	. Organizar comida y bebidas
+	. Preparar musica y espacio para actividades
+4. Llegada de invitados
+	. si los invitados ya llegaro:
+		. mantenerlos ocultos o en silencia hasta que llegue el 		cumpleañero
+	. si aun no han llegado:
+		. aprovechar para terminar detalles de decoracion
+5. Mientras esperan
+	. Revisar que todo este listo
+	. coordinar con alguien que avise cuando el cumpleañero este cerca
+	. Mantener a los invitados entretenidos
+6. Llegada del Cumpleañero
+	. apagar luces y esconderse
+	. cuando entre gritar "Sorpresa"!
+	. cacturar momento con fotos y videos
+7. Desarrollo de la fiesta
+	. musica, baile, comidas, actividades
+	. Entrega de regalos
+	. asegurar que el cumpleañero sea el centro de la fiesta
+8. Finalizacion
+	. compartir el Queque 
+	. agradecer a los invitados por asistir
+	. ordenar el lugar y despedirse  
+9. Fin 
+
+
+Algoritmo Extra 2
+Prepararse para un examen
+
+1. Inicio
+	. Definir: fecha del examen, temas a estudiar, materiales 	disponibles
+2. Lista de actividades
+	. leer los apuntes y materias princiapales
+	. repasar conmceptos clave y resumenes
+	. practicar con ejercicios 
+3. Conmdiciones de compression
+	. si entiende la materia:
+		. pasar a repasr y practicar para reforzar
+	. si tiene dudas:
+		. Buscar aclarar en libros, internet, preguntar a professor
+		. Volver a leer y repasar el tema especifico
+4. Ciclo de preparacion
+	. repetir el proceso de Leer, Repasar, Practicar
+	. al fin de cada ciclo, preguntarse:
+		estoy listo?
+			. si la respuesta es no:
+				Volver a iniciar el ciclo.
+			. si la respuesta es si:
+				avanzar al cierre
+5. Cierre
+	. hacer un repaso general de todos los temas
+ 	. preparer materiales necesarios para el examen
+	. descansar y dormir bien
+6. Fin
+
+
+Algoritmo extra 3
+Preparacion para viaje
+
+1. Inicio
+	. definer destino del viaje, fecha de salida, duracion
+	. hacer lista de cosas necesarias
+2. revision de documentos
+	. si los documentos estan completes(pasaporte, visa, boletos)
+		. continuar con el equipaje
+3. preparer equipaje
+	. seleccionar ropa adecuanda al clima y actividades
+	. empacar articulos de hygiene personal y accesorios
+	. guardar cargadores, camara, laptop, cellular
+4. Condiciones de preparacion
+	. si ya tiene todo listo:
+		. revisar lista final y descansar
+	. si aun falta algo:
+		. Volver a la lista y completer
+5. ciclo de verificacion
+	. revisar lista de viaje
+	. preguntat:> estoy listo para salir?
+         	. si la respuesta es no:
+			repetir el ciclo de revision y preparacion
+		si la respuesta es si:
+			avanzar al cierre
+6. Cierre
+	. confirmar transporte al aeropuerto
+	. avisar a familiars o amigos
+	. dormir temprano
+7. viaje
+	. salir con tiempo suficiente
+	. disfrutar del destino\
+8. fin 
+
+
+
+
+
