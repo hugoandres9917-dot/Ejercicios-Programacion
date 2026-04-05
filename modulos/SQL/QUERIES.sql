@@ -4,7 +4,7 @@ Cree una nueva base de datos en SQLite.
 
 --Tabla Productos
 
-     -- CREATE TABLE Productos (
+-- CREATE TABLE Productos (
         -- ID INTEGER PRIMARY KEY,
         -- Tipo TEXT NOT NULL,
         -- Precio REAL NOT NULL,
@@ -12,7 +12,7 @@ Cree una nueva base de datos en SQLite.
         -- );
 
 --Tabla Facturas
- -- CREATE TABLE Facturas (
+-- CREATE TABLE Facturas (
         -- ID INTEGER PRIMARY KEY,      
         -- Fecha TEXT NOT NULL,
         +--EMAIL TEXT NOT NULL UNIQUE,
@@ -20,7 +20,7 @@ Cree una nueva base de datos en SQLite.
         -- );
 
 --Tabla Detalles_Factura
- -- CREATE TABLE Detalles_Factura (
+-- CREATE TABLE Detalles_Factura (
         -- ID_DETALLE INTEGER PRIMARY KEY,
         -- ID_FACTURA INTEGER REFERENCES Facturas(ID),
         -- ID_PRODUCTO INTEGER REFERENCES Productos(ID),
@@ -131,7 +131,7 @@ PARTE 4
 --FROM Detalles_Factura
 --GROUP BY ID_PRODUCTO;     
 
---5. Obtenga todas las facturas realizadas po el mismo comprador
+--5. Obtenga todas las facturas realizadas por el mismo comprador
 
 --SELECT EMAIL, 
 --COUNT(*) AS Total_Facturas
@@ -148,6 +148,71 @@ PARTE 4
 --SELECT *
 --FROM Facturas
 --WHERE ID = 1; 
+
+--cambios solicitados
+
+-- mismo formato 
+
+--cambio de nombre de columna Facturas
+
+--ALTER TABLE Facturas
+--RENAME COLUMN id to Id;
+--ALTER TABLE Facturas
+--RENAME COLUMN EMAIL to Email;
+--ALTER TABLE Facturas
+--RENAME COLUMN Numero_telefono to Numero_Telefono;
+--ALTER TABLE Facturas
+--RENAME COLUMN Codigo_empleado to Codigo_Empleado;
+
+--cambio de nombre de columna Detalle_Factura
+
+--ALTER TABLE Detalles_Factura
+--RENAME COLUMN ID_DETALLE to Id_Detalle;
+
+--ALTER TABLE Detalles_Factura
+--RENAME COLUMN ID_FACTURA to Factura_Id;
+
+--ALTER TABLE Detalles_Factura
+--RENAME COLUMN ID_PRODUCTO to Id_Producto;
+
+--ALTER TABLE Detalles_Factura
+--RENAME COLUMN Cantidad to Cantidad;   
+
+--ALTER TABLE Detalles_Factura
+--RENAME COLUMN Id_Producto to Producto_Id;
+
+--Cambio de nombre de columna Carrito_Productos
+
+--ALTER TABLE Carrito_Productos
+--RENAME COLUMN id to Id;
+
+--ALTER TABLE Carrito_Productos
+--RENAME COLUMN id_producto to Producto_Id;
+
+--ALTER TABLE Carrito_Productos
+--RENAME COLUMN cantidad to Cantidad;
+
+--Cambio de nombre de columna Carrito_Compras
+
+--ALTER TABLE Carrito_Compras
+--RENAME COLUMN id to Id;
+
+--ALTER TABLE Carrito_Compras
+--RENAME COLUMN id_Usuario to Usuario_Id;
+
+--Cambio de nombre de columna Productos
+
+--ALTER TABLE Productos
+--RENAME COLUMN id to Id;
+
+--Cambios en parte 4 pregunta 5
+--Obtenga todas las facturas realizadas por el mismo comprador
+
+
+--SELECT *
+--FROM Facturas
+--WHERE EMAIL = 'cliente2@example.com';
+
 
 
 
