@@ -40,18 +40,69 @@ Cree una nueva base de datos en SQLite.
         -- ID_PRODUCTO INTEGER REFERENCES Productos(ID),
         -- Cantidad INTEGER NOT NULL
         -- );
+--PARTE 2
+--Replique las tablas creadas anteriormente en 
+--🔗 Ejercicio de Bases de Datos, con sus respectivos PKs, FKs
+--constraints, y demás requerimientos.
+
+--insertando datos de prueba
+
+--INSERT INTO Productos (id,Tipo, Precio, Fecha)
+--VALUES (1111, 'Coffe-Maker', 10000, '2024-01-01');
+--INSERT INTO  Productos (id,Tipo, Precio, Fecha)
+--VALUES (2222, 'Olla-Arrocera', 25000, '2024-01-02');
+--INSERT INTO Productos (id,Tipo, Precio, Fecha)
+--VALUES (3333, 'Cocina', 223000, '2024-01-03');   
+--INSERT INTO Productos (id,Tipo, Precio, Fecha)
+--VALUES (4444, 'Lavadora', 198500, '2024-03-01');      
+--INSERT INTO Productos (id,Tipo, Precio, Fecha)
+--VALUES (5555, 'Microondas', 45000, '2024-01-05');    
 
 
+--INSERT INTO Facturas (ID, Fecha, EMAIL, Total, Numero_Telefono, Codigo_Empleado)
+--VALUES (1, '2024-01-10', 'cliente1@example.com', 10000, '123456789', 'EMP001');
 
-PARTE 2
-Replique las tablas creadas anteriormente en 
-🔗 Ejercicio de Bases de Datos, con sus respectivos PKs, FKs
-.constraints, y demás requerimientos.
+--INSERT INTO Facturas (ID, Fecha, EMAIL, Total, Numero_Telefono, Codigo_Empleado)
+--VALUES (2, '2024-01-11', 'cliente2@example.com', 25000, '987654321', 'EMP002');
 
-Investigue cómo hacer que los PKs se generen automáticamente.
-Utilice los tipos de datos adecuados.
-Si existe alguna limitante por SQLite, documéntela y
-resuelva la limitante como considere adecuado.
+--INSERT INTO Facturas (ID, Fecha, EMAIL, Total, Numero_Telefono, Codigo_Empleado)
+--VALUES (3, '2024-01-12', 'cliente3@example.com', 223000, '555555555', 'EMP003');
+
+--INSERT INTO Facturas (ID, Fecha, EMAIL, Total, Numero_Telefono, Codigo_Empleado)
+--VALUES (4, '2024-03-01', 'cliente4@example.com', 198500, '111111111', 'EMP004');
+
+--INSERT INTO Detalles_Factura (ID_DETALLE, ID_FACTURA, ID_PRODUCTO, Cantidad)
+--VALUES (1, 1, 1111, 1);
+--INSERT INTO Detalles_Factura (ID_DETALLE, ID_FACTURA, ID_PRODUCTO, Cantidad)
+--VALUES (2, 2, 2222, 1);
+--INSERT INTO Detalles_Factura (ID_DETALLE, ID_FACTURA, ID_PRODUCTO, Cantidad)
+--VALUES (3, 3, 3333, 1);
+--INSERT INTO Detalles_Factura (ID_DETALLE, ID_FACTURA, ID_PRODUCTO, Cantidad)
+--VALUES (4, 4, 4444, 1);
+
+--INSERT INTO Carrito_Compras (ID, ID_USUARIO, Fecha)
+--VALUES (1, 'cliente1@example.com', '2024-01-10');
+--INSERT INTO Carrito_Compras (ID, ID_USUARIO, Fecha)
+--VALUES (2, 'cliente2@example.com', '2024-01-11');
+--INSERT INTO Carrito_Compras (ID, ID_USUARIO, Fecha)
+--VALUES (3, 'cliente3@example.com', '2024-01-12');
+--INSERT INTO Carrito_Compras (ID, ID_USUARIO, Fecha)
+--VALUES (4, 'cliente4@example.com', '2024-01-13');
+
+--INSERT INTO Carrito_Productos (ID_CARRITO, ID_PRODUCTO, Cantidad)
+--VALUES (1, 1111, 1);
+--INSERT INTO Carrito_Productos (ID_CARRITO, ID_PRODUCTO, Cantidad)
+--VALUES (2, 2222, 1);
+--INSERT INTO Carrito_Productos (ID_CARRITO, ID_PRODUCTO, Cantidad
+--VALUES (3, 3333, 1);
+--INSERT INTO Carrito_Productos (ID_CARRITO, ID_PRODUCTO, Cantidad
+--VALUES (4, 4444, 1);
+
+
+--Investigue cómo hacer que los PKs se generen automáticamente.
+--Utilice los tipos de datos adecuados.
+--Si existe alguna limitante por SQLite, documéntela y
+--resuelva la limitante como considere adecuado.
 
 Investigacion:
 
