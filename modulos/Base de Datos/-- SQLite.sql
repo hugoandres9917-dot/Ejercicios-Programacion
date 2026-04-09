@@ -1,0 +1,4 @@
+SELECT *
+FROM Productos
+ORDER BY Id ASC
+LIMIT 4;
