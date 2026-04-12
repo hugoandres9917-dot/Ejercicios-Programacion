@@ -325,7 +325,152 @@
 
 
 
+--cambios solicitados
+--Para la Tabla Automovimoviles, la forma que hemos averiguado para eleiminar
+--los siguientes problemas
+-- make y model dependen entre si no por su VIN- rompe 3FN
+--owner_name y owner_Phone dependen de owner_ID no de VIN-REDUNDANCIA
+--InsuranceCompany no depende de poliza si no poliza depende de compañia- rompe 2FN
+--una poliza puede cubrir varios vehiculos-- creamos tabla puente entre policy-vehicle
 
+---Nuevo esquema de tablas
+
+--tabla Make
+--tabla Model
+--tabla Automoviles
+--Tabla Owner
+--tabla Company
+--tabla Policy
+--tabla Policy_Vehicle
+
+
+--CREATE TABLE Make (
+  --ID INTEGER PRIMARY KEY,
+  --MakeName TEXT NOT NULL
+--);
+
+--CREATE TABLE Model (
+    --ID INTEGER PRIMARY KEY,
+    --Make_Id INTEGER REFERENCES Make(ID),
+    --Model_Name TEXT NOT NULL
+--);
+
+--CREATE TABLE Automoviles (
+  --  VIN TEXT PRIMARY KEY,
+  --  Model_Id INTEGER REFERENCES Model(ID),
+  --  Year INTEGER NOT NULL,
+  --  Color TEXT NOT NULL
+--);
+
+  --CREATE TABLE Company (
+  --ID INTEGER PRIMARY KEY,
+  --Company_Name TEXT NOT NULL
+--);
+
+--CREATE TABLE Policy (
+  --ID INTEGER PRIMAY KEY,
+  --Policy_Number TEXT NOT NULL,
+  --Company_Id INTEGER REFERENCES Company(ID),
+  --Owner_Id INTEGER REFERENCES Owner(ID)
+--);
+
+--CREATE TABLE Policy_Vehicle (
+  --  PolicyID INTEGER NOT NULL,
+  --  VIN TEXT NOT NULL,
+  --  PRIMARY KEY (PolicyID, VIN),
+  --  FOREIGN KEY (PolicyID) REFERENCES Policy(PolicyID),
+  --  FOREIGN KEY (VIN) REFERENCES Automóviles(VIN)
+--);
+
+---Insertamos los datos en las nuevas tablas 
+
+--Tabla Make
+--INSERT INTO Make (ID, MakeName)
+--VALUES (1, 'Honda');
+--INSERT INTO Make (ID, MakeName)
+--VALUES(2, 'Chevrolet');
+
+--Tabla Model
+--INSERT INTO Model (ID, Model_Name, Make_Id)
+--VALUES (1, 'Accord', 1);
+--INSERT INTO Model (ID, Model_Name, Make_Id)
+--VALUES (2, 'CR-V', 1);
+--INSERT INTO Model (ID, Model_Name,Make_Id)
+--VALUES (3, 'Volt', 2);
+
+--Tabla Automoviles
+
+
+--INSERT INTO Automoviles (VIN, Model_Id, Year, Color)
+--VALUES ('1HGCM82633A', 1, 2003, 'Silver');
+--INSERT INTO Automoviles (VIN, Model_Id, Year, Color)
+--VALUES ('5J6RM4H79EL', 2, 2014, 'Blue');
+--INSERT INTO Automoviles (VIN, Model_Id, Year, Color)
+--VALUES ('1G1RA6EH1FU', 3, 2015, 'Red');
+
+
+--Tabla Owner
+----INSERT INTO Owner (ID, Owner_Name, Owner_Phone)
+--VALUES (101, 'Alice', '123-456-7890');
+--INSERT INTO Owner (ID, Owner_Name, Owner_Phone)
+--VALUES (102,'Bob', '987-654-3210');
+--INSERT INTO Owner (ID, Owner_Name, Owner_Phone)
+--VALUES (103, 'Claire', '555-123-4567');
+--INSERT INTO Owner (ID, Owner_Name, Owner_Phone)
+--VALUES (104, 'Dave', '111-222-3333');
+
+--Tabla Compay (Seguros)
+
+--INSERT INTO Company (ID, Company_Name)
+--VALUES (1, 'ABC Insurance');
+--INSERT INTO Company (ID, Company_Name)
+--VALUES (2, 'XYZ Insurance');
+--INSERT INTO Company(ID, Company_Name)
+--VALUES (3, 'DEF Insurance');
+--INSERT INTO Company (ID, Company_Name)
+--VALUES (4, 'GHI Insurance');
+
+
+--Tabla Policy
+
+--INSERT INTO Policy(ID, Policy_Number, Company_Id, Owner_Id)
+--VALUES (1, 'POL12345', 1, 101);
+--INSERT INTO Policy (ID, Policy_Number, Company_Id, Owner_Id)
+--VALUES (2, 'POL54321', 2, 102);
+--INSERT INTO Policy (ID, Policy_Number, Company_Id, Owner_Id)
+--VALUES (3, 'POL67890', 3, 103);
+--INSERT INTO Policy (ID, Policy_Number, Company_Id, Owner_Id)
+--VALUES (4, 'POL98765', 4, 104);
+
+
+--Tabla Policy_Vehicle
+
+--INSERT INTO Policy_Vehicle (PolicyID, VIN)
+--VALUES (1, '1HGCM82633A');
+--INSERT INTO Policy_Vehicle (PolicyID, VIN)
+--VALUES (2, '1HGCM82633A');
+--INSERT INTO Policy_Vehicle (PolicyID, VIN)
+--VALUES (3, '5J6RM4H79EL');
+--INSERT INTO Policy_Vehicle (PolicyID, VIN)
+--VALUES (4, '1G1RA6EH1FU');
+
+
+
+---Con este cambio y tablas nuevas 
+--tabla Make
+--tabla Model
+--tabla Automoviles
+--Tabla Owner
+--tabla Company
+--tabla Policy
+--tabla Policy_Vehicle
+
+--cada marca y modelo se guarda una sola vez
+-- los automoviles solo referencian el modelo
+--los dueños estan centralizados con su informacacion de contacto
+--las compañias se guardan un sola vez
+--las polizas vinculan compañia y dueño
+-- la tabla cruz Policy_Vehicle permite que una poliza cubra multiples vehiculos
 
 
 
