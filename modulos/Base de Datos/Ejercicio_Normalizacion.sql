@@ -388,6 +388,7 @@ CREATE TABLE Owner_Policy (
 CREATE TABLE Policy_Vehicle (
   PolicyID INTEGER NOT NULL,
   VIN TEXT NOT NULL,
+  Owner_ID INTERGER REFERENCES Owners(Owner_Id),
   PRIMARY KEY (PolicyID, VIN),
   FOREIGN KEY (PolicyID) REFERENCES Policy(ID),
   FOREIGN KEY (VIN) REFERENCES Automoviles(VIN)
@@ -464,28 +465,25 @@ INSERT INTO Owner_Policy (Owner_ID, Policy_Id)
 VALUES (101, 3); 
 
 --Tabla Policy_Vehicle
-INSERT INTO Policy_Vehicle (PolicyID, VIN)
-VALUES (1, '1HGCM82633A');
-INSERT INTO Policy_Vehicle (PolicyID, VIN)
-VALUES (2, '1HGCM82633A');
-INSERT INTO Policy_Vehicle (PolicyID, VIN)
-VALUES (3, '5J6RM4H79EL');
-INSERT INTO Policy_Vehicle (PolicyID, VIN)
-VALUES (4, '1G1RA6EH1FU');
-INSERT INTO Policy_Vehicle (PolicyID, VIN)
-VALUES (3, '1HGCM82633A');
 
---Con estos cambios una poliza de seguro puede
---cubrir multiples vehiculos
---cada vehiculo puede tener varias polizas
---integridad referancial y el modelo cumple con 3fn
+INSERT INTO Policy_Vehicle (PolicyID, VIN, Owner_ID)
+VALUES (1, '1HGCM82633A', 101);
+INSERT INTO Policy_Vehicle (PolicyID, VIN, Owner_ID)
+VALUES (2, '1HGCM82633A', 102);
+INSERT INTO Policy_Vehicle (PolicyID, VIN, Owner_ID)
+VALUES (3, '5J6RM4H79EL', 103);
+INSERT INTO Policy_Vehicle (PolicyID, VIN, Owner_ID)
+VALUES (4, '1G1RA6EH1FU', 104);
+INSERT INTO Policy_Vehicle (PolicyID, VIN, Owner_ID)
+VALUES (3, '1HGCM82633A', 101);
 
---para que los seguros aplique a mas de un vehiculo
--- agregamos a la tabla Policy la columna de Coverage_Type para asi identificar cual es la cobertura que lleva cada auto
 
---hola Andres ya capte lo que me dices ,
-gracias,
-segun entiendo Owner Id en Policy nos causa una inconsitencia
-ya que genera que cada poliza se asigne a cada dueno y no a 
-muchos vehiculos, voy crear una nueva tabla puente que conecte
-Owner y policy y asi la relacion queda creada.
+
+
+DROP TABLE Owner_Policy
+
+--Comprendo ahora la opcion que mesionas seria mover Owner_ID 
+--para la tabla cruz Policy vehicle ya existente para asi eliminar 
+--la creacion de mas tablas , esto permite que la poliza se siga aplicando 
+--a mas vahiculos y
+--que varios duenos contraten la misma poliza, esta manera es mas agil creo
