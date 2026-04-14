@@ -376,9 +376,14 @@ CREATE TABLE Policy (
   ID INTEGER PRIMARY KEY,
   Policy_Number TEXT NOT NULL,
   Coverage_Type TEXT NOT NULL, -- EJEMPLO COVERTURA TOTAL
-  Company_Id INTEGER REFERENCES Company(ID),
-  Owner_Id INTEGER REFERENCES Owner(ID)
+  Company_Id INTEGER REFERENCES Company(ID)
 );
+
+CREATE TABLE Owner_Policy (
+    Owner_ID INTEGER REFERENCES Owners(Owner_ID),
+    Policy_Id integer REFERENCES Policy(ID)
+);
+
 
 CREATE TABLE Policy_Vehicle (
   PolicyID INTEGER NOT NULL,
@@ -436,14 +441,27 @@ VALUES (4, 'GHI Insurance');
 
 
 --Tabla Policy
-INSERT INTO Policy(ID, Policy_Number, Coverage_type, Company_Id, Owner_Id)
-VALUES (1, 'POL12345','Cobertura Total', 1, 101);
-INSERT INTO Policy (ID, Policy_Number, Coverage_type, Company_Id, Owner_Id)
-VALUES (2, 'POL54321', 'Cobertura de accidente deducible', 2, 102);
-INSERT INTO Policy (ID, Policy_Number, Coverage_type, Company_Id, Owner_Id)
-VALUES (3, 'POL67890', 'Cobertura a terceros', 3, 103);
-INSERT INTO Policy (ID, Policy_Number, Coverage_type, Company_Id, Owner_Id)
-VALUES (4, 'POL98765', 'Cobertura asistencia en camino', 4, 104);
+INSERT INTO Policy(ID, Policy_Number, Coverage_type, Company_Id)
+VALUES (1, 'POL12345','Cobertura Total', 1);
+INSERT INTO Policy (ID, Policy_Number, Coverage_type, Company_Id)
+VALUES (2, 'POL54321', 'Cobertura de accidente deducible', 2);
+INSERT INTO Policy (ID, Policy_Number, Coverage_type, Company_Id)
+VALUES (3, 'POL67890', 'Cobertura a terceros', 3);
+INSERT INTO Policy (ID, Policy_Number, Coverage_type, Company_Id)
+VALUES (4, 'POL98765', 'Cobertura asistencia en camino', 4);
+
+
+--TABLA Owner_Policy
+INSERT INTO Owner_Policy (Owner_ID, Policy_Id)
+VALUES (101, 1);
+INSERT INTO Owner_Policy (Owner_ID, Policy_Id)
+VALUES (102, 2);
+INSERT INTO Owner_Policy (Owner_ID, Policy_Id)
+VALUES (103, 3);
+INSERT INTO Owner_Policy (Owner_ID, Policy_Id)
+VALUES (104, 4);
+INSERT INTO Owner_Policy (Owner_ID, Policy_Id)
+VALUES (101, 3); 
 
 --Tabla Policy_Vehicle
 INSERT INTO Policy_Vehicle (PolicyID, VIN)
@@ -457,7 +475,6 @@ VALUES (4, '1G1RA6EH1FU');
 INSERT INTO Policy_Vehicle (PolicyID, VIN)
 VALUES (3, '1HGCM82633A');
 
-
 --Con estos cambios una poliza de seguro puede
 --cubrir multiples vehiculos
 --cada vehiculo puede tener varias polizas
@@ -466,3 +483,9 @@ VALUES (3, '1HGCM82633A');
 --para que los seguros aplique a mas de un vehiculo
 -- agregamos a la tabla Policy la columna de Coverage_Type para asi identificar cual es la cobertura que lleva cada auto
 
+--hola Andres ya capte lo que me dices ,
+gracias,
+segun entiendo Owner Id en Policy nos causa una inconsitencia
+ya que genera que cada poliza se asigne a cada dueno y no a 
+muchos vehiculos, voy crear una nueva tabla puente que conecte
+Owner y policy y asi la relacion queda creada.
