@@ -9,15 +9,15 @@ products = [
 
 
 # Diccionario para acumular totales por categoría
-total_por_categoria = {}
+total_for_category = {}
 
 # Recorrer la lista de productos
-for producto in products:
-    categoria = producto['category']
-    precio = producto['price']
-    total_por_categoria[categoria] = total_por_categoria.get(categoria, 0) + precio
+for product in products:
+    category = product['category']
+    price = product['price']
+    total_for_category[category] = total_for_category.get(category, 0) + price
 
 # Mostrar el resultado
-print(total_por_categoria)
+print(total_for_category)
 
 

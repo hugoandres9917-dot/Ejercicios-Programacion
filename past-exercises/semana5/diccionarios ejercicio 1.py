@@ -1,31 +1,29 @@
-hotel =[
-{
-    'nombre':'Arrecife_hotel',
-    'numero_de_estrellas': 5,
-    'habitaciones': [
+hotel ={
+    'name':'Arrecife_hotel',
+    'number_of_stars': 5,
+    'rooms': [
     {
-     'numero': 1,
-     'piso': 2,
-     'precio_por_noche': 90.00,
+    'number': 1,
+    'floor': 2,
+    'price_per_night': 90.00,
     },
     {
-	'numero': 2,
-     'piso': 2,
-     'precio_por_noche': 90.00,
+	'number': 2,
+    'floor': 2,
+    'price_per_night': 90.00,
 	},
     {
-     'numero': 3,
-     'piso': 2,
-     'precio_por_noche': 110.00,
+    'number': 3,
+    'floor': 2,
+    'price_per_night': 110.00,
     },
     {
-	'numero': 4,
-     'piso': 2,
-     'precio_por_noche': 110.00,
+	'number': 4,
+    'floor': 2,
+    'price_per_night': 110.00,
 	},
 ],
 
-},
-]
-
+}
 print(hotel)
+

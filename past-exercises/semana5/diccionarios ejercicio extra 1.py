@@ -62,6 +62,3 @@ for sale in sales:
         upc_sales[upc]= upc_sales.get(upc,0) + price
 
 print(upc_sales)
-
-#- dict.get(clave, 0) es útil para inicializar acumuladores.
-#Este patrón es común en análisis de ventas, inventario y reportes.
