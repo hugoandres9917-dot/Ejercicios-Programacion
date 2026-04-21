@@ -6,19 +6,18 @@ employees = [
 ]
 # Diccionario para agrupar por departamento
 
-employee_for_department = {}
+dept_employees = {}
 # Recorrer la lista de empleados
 
 for employee in employees:
-     depart = employee['department']
-     if depart not in employee_for_department:
-        employee_for_department[depart] = []
-        employee_for_department[depart].append(employee)
+    depart = employee['department']
+    if depart not in dept_employees:
+        dept_employees[depart] = []
+    dept_employees[depart].append(employee)
 
 # Mostrar el resultado
 
-for depart, list in employee_for_department.items():
-       print(f"{depart}")
-       for empl in list:
-              print(f'-{empl["name"]} ({empl["email"]}')
-              
+for depart, list in dept_employees.items():
+    print(f"{depart}")
+    for empl in list:
+        print(f'-{empl["name"]} ({empl["email"]})')

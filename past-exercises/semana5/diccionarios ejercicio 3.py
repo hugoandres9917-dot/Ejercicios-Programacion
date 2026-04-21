@@ -4,10 +4,11 @@ employee_info  = {
     'grade': 3,
     'age': 37
 }
-key_eliminartor = ['email','grade']
+key_to_delete= ['email','grade']
 
-for item in key_eliminartor:
-     employee_info.pop(item)
+for item in key_to_delete:
+    employee_info.pop(item)
     
 print(employee_info)
-print(f'deletec intem {key_eliminartor}')
+print(f'deletec intem {key_to_delete}')
+
