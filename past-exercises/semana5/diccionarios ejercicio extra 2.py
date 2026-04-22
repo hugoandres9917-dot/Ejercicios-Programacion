@@ -17,7 +17,9 @@ for employee in employees:
 
 # Mostrar el resultado
 
-for depart, list in dept_employees.items():
+for depart, employees_list in dept_employees.items():
     print(f"{depart}")
-    for empl in list:
+    for empl in employees_list:
         print(f'-{empl["name"]} ({empl["email"]})')
+
+        
