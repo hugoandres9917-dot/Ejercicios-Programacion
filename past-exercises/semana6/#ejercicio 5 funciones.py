@@ -1,4 +1,7 @@
 #ejercicio 5 funciones
+#Cree una función que imprima el número de mayúsculas y el número de minúsculas en un string.
+##“I love Nación Sushi” → “There’s 3 upper cases and 13 lower cases”
+
 
 def cont_cappital_lower_letter(text):
     cappital = 0
@@ -14,5 +17,5 @@ def cont_cappital_lower_letter(text):
     print(f"Número de minúsculas: {lower_case}")
 
 
-my_string = "Funcione Dentro De La Programacion"
+my_string = "Funciones Dentro De La Programacion"
 cont_cappital_lower_letter(my_string)
