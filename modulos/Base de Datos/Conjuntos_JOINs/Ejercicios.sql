@@ -123,10 +123,11 @@ WHERE Rents.CustomerID IS NULL;
 
 --Obtenga todos los libros que han sido rentados y están en estado “Overdue”
 
-
 SELECT Books.ID, Books.Name AS book, Rents.State
 FROM Books
 INNER JOIN Rents
 ON Books.ID = Rents.BookID
 WHERE Rents.State = 'Overdue';
+
+
 
