@@ -3,10 +3,17 @@
 ##. La función va a tener un parámetro (la lista) y retornar un numero (la suma de todos sus elementos).
 ##. [4, 6, 2, 29] → 41
 
-def sum_total_numbers(num_1, num_2,num_3,num_4):
-	return num_1 +	num_2 + num_3 + num_4
+def sum_total_numbers(numbers):
+	total = 0
+	for num in numbers:
+		total += num
+	return total
 
-sum_total_numbers(4,6,2,29)
+numb_list = [4, 6, 2, 29]
 
-print (sum_total_numbers(4,6,2,29))
+print(f"Lista de números: {numb_list}")
+
+print(f"Suma total: {sum_total_numbers(numb_list)}")
+
+
 
