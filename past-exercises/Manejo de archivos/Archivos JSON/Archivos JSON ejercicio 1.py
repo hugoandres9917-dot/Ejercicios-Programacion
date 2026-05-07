@@ -1,6 +1,12 @@
 #semana 8 ejercicios JSON
 #LA POKEDEX
 
+#Cree un programa que permita agregar un Pokémon nuevo al archivo de la lección de JSON 
+# (ipsum:lesson/python-bsico/manejo-de-json)
+#Debe leer el archivo para importar los Pokémones existentes.
+#Luego debe pedir la información del Pokémon a agregar.
+#Finalmente debe guardar el nuevo Pokémon en el archivo.
+
 import json
 
 def load_pokemon_data(file_name="pokedex.json"):
@@ -31,16 +37,18 @@ def add_new_pokemon():
         print("El nombre no puede estar vacío.")
         return None
 
-    types = input("Tipo o tipos, separados por comas(ej. fuego, volador)").strip().split(",")
-
+    types = [t.strip().title() for t in input("Tipo o tipos, separados por comas(ej. fuego, volador)").split(",") if t.strip()]
+    if not types:
+        print("Debe ingresar al menos un tipo.")
+        return None
     try:
         base = {
-            "HP": int(input("HP: ")),
-            "Ataque": int(input("Ataque: ")),
-            "Defensa": int(input("Defensa: ")),
-            "Ataque Sp.": int(input("Ataque Sp: ")),
-            "Defensa Sp.": int(input("Defensa Sp:")),
-            "Velocidad": int(input("Velocidad: "))
+            "hp": int(input("HP: ")),
+            "attack": int(input("Ataque: ")),
+            "defense": int(input("Defensa: ")),
+            "attack_spc": int(input("Ataque Sp: ")),
+            "defense_spc": int(input("Defensa Sp:")),
+            "speed": int(input("Velocidad: "))
         }
     except ValueError:
         print("Los valores deben ser numeros enteros.")
@@ -52,12 +60,14 @@ def add_new_pokemon():
         "base": base
     }
 if __name__ == "__main__":
-    pokemons = load_pokemon_data()
+    file_name = input("Ingrese el nombre del archivo JSON para la pokedex (ej. pokedex.json): ").strip()
+    file_name = file_name if file_name else "pokedex.json"
+    pokemons = load_pokemon_data(file_name)
     new_pokemon = add_new_pokemon()
 
     if new_pokemon:
         pokemons.append(new_pokemon)
-        save_pokemon_data(pokemons)
+        save_pokemon_data(pokemons, file_name)
     else:
         print("No fue posible agregar el Pokemon a la pokedex")
         

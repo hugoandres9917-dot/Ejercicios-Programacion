@@ -1,4 +1,11 @@
-# semana 8 archivos csv
+# Archivos csv ejercicio 1:
+
+# Crear un programa que permita al usuario,
+# ingresar información sobre videojuegos
+# (nombre, género, desarrollador, clasificación ESRB)
+# y guarde esta información en un archivo CSV.
+# El programa debe permitir al usuario agregar múltiples
+# videojuegos y finalizar el proceso cuando lo desee.
 
 import csv
 
@@ -49,7 +56,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nProceso interrumpido por el usuario.")
 		
-		videogames = [v for v in videogames if v is not None]
+    videogames = [v for v in videogames if v is not None]
     if videogames:
         save_in_csv(videogames)
         print("Finalizo el registro de videojuegos. ")
