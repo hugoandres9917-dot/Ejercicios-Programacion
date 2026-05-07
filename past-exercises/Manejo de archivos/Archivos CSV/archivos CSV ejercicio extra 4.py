@@ -1,4 +1,8 @@
-#semana 8 ejercicio extra 4
+#Archivos CSV ejercicio extra 4
+#Cree un programa que abra un archivo .csv con la información de videojuegos( en base al CSV que fue generado en el ejercicio 1) y:
+#Lea el archivo .csv con videojuegos
+#Pida al usuario ingresar el nombre de un desarrollador (ej. "Ubisoft")
+#Muestre todos los videojuegos desarrollados por esa empresa en formato legible:
 
 import csv
 

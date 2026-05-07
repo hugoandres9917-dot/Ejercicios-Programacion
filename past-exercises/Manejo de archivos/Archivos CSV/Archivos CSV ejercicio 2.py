@@ -1,5 +1,7 @@
 
-# semana 8 archivos csv con tsv
+# Archivos csv ejercicio 2:
+# videojuegos con tsv
+
 
 import csv
 
@@ -11,10 +13,10 @@ def add_videogame():
         developer = input('ingrese el nombre del Desarrollador: ')
         clasification = input("ingrese la Clasificacion ESRB: ")
         return {
-            "Nombre": name,
-            "Genero": gender,
-            "Desarrollador": developer,
-            "Clasificacion ESRB": clasification,
+            "name": name,
+            "gender": gender,
+            "developer": developer,
+            "clasification": clasification,
         }
     except Exception as e:
         print(f'Error al ingresar los datos solicitados, debe ser mas especifico: {e}')
@@ -24,7 +26,7 @@ def add_videogame():
 def save_in_tsv(videogames_list, file_name ="videogames.tsv"):
     try:
         with open(file_name, 'w', newline='', encoding= 'utf-8') as tsv_file:
-            filenames = ['Nombre','Genero','Desarrollador','Clasificacion ESRB']
+            filenames = ['name','gender','developer','clasification']
             writer_csv = csv.DictWriter(tsv_file, fieldnames=filenames, delimiter='\t')
             writer_csv.writeheader()
             writer_csv.writerows(videogames_list)

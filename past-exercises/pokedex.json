@@ -1,0 +1,36 @@
+[
+    {
+        "name": {
+            "english": "Bulbasaur"
+        },
+        "type": [
+            "Planta",
+            "Veneno"
+        ],
+        "base": {
+            "hp": 10,
+            "attack": 15,
+            "defense": 20,
+            "attack_spc": 12,
+            "defense_spc": 15,
+            "speed": 10
+        }
+    },
+    {
+        "name": {
+            "english": "Bulbasaur"
+        },
+        "type": [
+            "Planta",
+            "Veneno"
+        ],
+        "base": {
+            "hp": 45,
+            "attack": 49,
+            "defense": 49,
+            "attack_spc": 65,
+            "defense_spc": 65,
+            "speed": 45
+        }
+    }
+]
