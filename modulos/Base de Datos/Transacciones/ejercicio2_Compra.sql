@@ -7,8 +7,8 @@
 --Reducir el stock de los productos según la cantidad comprada.
 
 -- 1. Insertar datos iniciales
-INSERT INTO Users (name, email) VALUES ('Hugo', 'hugo@mail.com');
-INSERT INTO Users (name, email) VALUES ('Ana', 'ana@mail.com');
+--INSERT INTO Users (name, email) VALUES ('Hugo', 'hugo@mail.com');
+--INSERT INTO Users (name, email) VALUES ('Ana', 'ana@mail.com');
 
 INSERT INTO Products (name, price, stock) VALUES 
 ('Laptop', 1200, 10),

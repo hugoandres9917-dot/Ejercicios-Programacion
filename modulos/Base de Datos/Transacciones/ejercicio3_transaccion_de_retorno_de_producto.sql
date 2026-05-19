@@ -46,3 +46,5 @@ BEGIN
     RAISE NOTICE 'Factura % marcada como Retornada y stock actualizado', v_bill_id;
 END;
 $$;
+
+--pendiente de revision 
