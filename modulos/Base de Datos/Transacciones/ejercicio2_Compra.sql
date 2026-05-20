@@ -28,8 +28,20 @@ BEGIN
         RAISE EXCEPTION 'El usuario % no existe', v_user_id;
     END IF;
 
-    --Crear fecatura vacia
-    INSERT INTO Bills (user_id) VALUES (v_user_id)
+    --validar stock de todos los productos antes de iniciar la compra
+    FOR v_products IN
+        SELECT product_id, price, stock, 2 AS quantity
+        FROM Products
+        WHERE product_id IN (1, 2)
+    LOOP
+        IF v_products.stock < v_products.quantity THEN
+            RAISE EXCEPTION 'Stock insuficiente para producto %', v_products.product_id;
+        END IF;
+    END LOOP;   
+
+    --Crear factura vacia, todos los productos estan con stock suficiente
+    INSERT INTO Bills (user_id, total, status, bill_date)
+    VALUES (v_user_id, 0, 'Pendiente', CURRENT_DATE)
     RETURNING bill_id INTO v_bill_id;
 
     --simulacion de productos comprados
@@ -38,23 +50,17 @@ BEGIN
         FROM Products
         WHERE product_id IN  (1, 2)
     LOOP
-
-        --Validar stock sufuciente
-        IF v_product.stock < v_product.quatity THEN
-            RAISE EXCEPTION 'stock insufuiciente para producto %',  v_products.product_id;
-        END IF;
-
         --INSERTAR detalle de factura
-        INSERT INTO Bill_Details (bill_id, product_id, quatity, subtotal)
-        VALUES (v_bill_id, v_products.product_id, v_products.quatity, v_products.price * v_products.quatity);
+        INSERT INTO Bill_Details (bill_id, product_id, quantity, subtotal)
+        VALUES (v_bill_id, v_products.product_id, v_products.quantity, v_products.price * v_products.quantity);
 
         --reducir stock
         UPDATE Products
-        SET stock = stock - v_products.quatity
+        SET stock = stock - v_products.quantity
         WHERE product_id = v_products.product_id;
 
         --acumular total
-        v_total := v_total + (v_products.price * v_products.quatity);
+        v_total := v_total + (v_products.price * v_products.quantity);
     END LOOP;
 
     --ACTUALIZAR TOTAL DE LA FACTURA

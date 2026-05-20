@@ -8,8 +8,11 @@
 --agregar columna de status a la tabla de bills 
 -- para asignar el estado de la factura (Activa, Retornada, etc)
 
-ALTER TABLE Bills
-ADD COLUMN status VARCHAR(20) DEFAULT 'Activa';
+--ALTER TABLE Bills
+--ADD COLUMN status VARCHAR(20) DEFAULT 'Activa';
+
+ALTER TABLE Bills ADD COLUMN return_date TIMESTAMP;
+ALTER TABLE Bills ADD COLUMN return_total NUMERIC(12,2);
 
 
 --ejercicio3_transaccion_de_retorno_de_producto
@@ -22,6 +25,11 @@ BEGIN
     --validar que la factura existe
     IF NOT EXISTS (SELECT 1 FROM Bills WHERE bill_id = v_bill_id) THEN
         RAISE EXCEPTION ' La factura % no existe', v_bill_id;
+    END IF;
+    --validar que la factura no este ya retornada
+    IF EXISTS (SELECT 1 FROM Bills WHERE bill_id = v_bill_id AND status = 'Retornada') THEN
+        RAISE NOTICE ' La factura % ya fue retornada', v_bill_id;
+        RETURN;
     END IF;
 
     --Recorrer los productos de la factura
@@ -38,13 +46,13 @@ BEGIN
 
     --Marcar la factura como Retornada
     UPDATE Bills
-    SET total = 0,
-    bill_date = CURRENT_TIMESTAMP,
-    status = 'Retornada'
+    SET status = 'Retornada',
+        return_date = CURRENT_TIMESTAMP,
+        return_total = total
     WHERE bill_id = v_bill_id;
 
     RAISE NOTICE 'Factura % marcada como Retornada y stock actualizado', v_bill_id;
 END;
 $$;
 
---pendiente de revision 
+
