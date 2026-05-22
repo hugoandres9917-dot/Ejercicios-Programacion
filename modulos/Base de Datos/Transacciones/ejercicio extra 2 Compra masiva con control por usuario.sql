@@ -28,10 +28,10 @@ BEGIN
         SELECT buy.product_id, buy.quantity, p.price, p.stock
         FROM (
             VALUES
-                (1, 2, 10.00, 5),
-                (2, 1, 20.00, 3),
-                (3, 3, 15.00, 10)
-        ) AS buy(product_id, quantity, price, stock)
+                (1, 2),
+                (2, 1),
+                (3, 3)
+        ) AS buy(product_id, quantity)
         JOIN Products p ON p.product_id = buy.product_id    
     LOOP
 

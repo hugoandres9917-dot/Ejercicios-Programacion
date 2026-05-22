@@ -28,9 +28,8 @@ BEGIN
         FROM Bill_Details
         WHERE bill_id = v_bill_id
     LOOP
-
         -- solo devolver stock de productos No entregados
-        IF v_products.entregados = FALSE THEN
+        IF v_products.entregado = FALSE THEN
             UPDATE Products
             SET stock = stock + v_products.quantity
             WHERE product_id = v_products.product_id;
