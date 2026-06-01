@@ -32,12 +32,12 @@ class Inventory:
         return total
     
 try:
-    Product1 = Product("Laptop", 1000, 5)
-    Product2 = Product("Smartphone", 500, 10)
+    product1 = Product("Laptop", 1000, 5)
+    product2 = Product("Smartphone", 500, 10)
     
     inventory = Inventory()
-    inventory.add_product(Product1)
-    inventory.add_product(Product2)
+    inventory.add_product(product1)
+    inventory.add_product(product2)
     
     inventory.show_products()
     print("Valor total del inventario: ", inventory.calculate_total_value())
