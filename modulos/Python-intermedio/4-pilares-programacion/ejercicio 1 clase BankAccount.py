@@ -13,10 +13,10 @@ class BankAccount:
         self.balance = balance #Atributo de balance
         
     def deposit(self, amount):
-        if amount > 0:
+        if amount <= 0:
             raise ValueError("El monto a depositar debe ser positivo.")
         self.balance += amount #Método para ingresar dinero
-        return self.balancec 
+        return self.balance 
     
     def withdraw(self, amount):
         if amount <= 0:

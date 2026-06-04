@@ -10,8 +10,9 @@ class Shape(ABC):  #Clase abstracta de Shape
     @abstractmethod
     def calculate_perimeter(self): #Método abstracto para calcular el perímetro
         pass
-
-    def calculate_area(self): #Método abstracto para calcular el área
+    
+    @abstractmethod # Método abstracto para calcular el área
+    def calculate_area(self): 
         pass
     
 class Circle(Shape): #Clase Circle que hereda de Shape
@@ -28,8 +29,8 @@ class Square(Shape): #Clase Square que hereda de Shape
     def __init__(self, side):
         self.side = side
         
-    def calculate_perimeter(self):# El perímetro de un cuadrado se calcula como 4 * lado
-        return 4 * self.side
+    def calculate_perimeter(self):
+        return 4 * self.side # El perímetro de un cuadrado se calcula como 4 * lado
     
     def calculate_area(self): # El área de un cuadrado se calcula como lado^2
         return self.side ** 2
