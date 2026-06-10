@@ -87,9 +87,9 @@ class DoublyLinkedList:
         show = ""
         while current is not None:
             show += f"[{current.data}]"
-            if current.next is not None:
+            if current.prev is not None:
                 show += " <-> "
-            current = current.next
+            current = current.prev
         print(show if show else "Lista vacia")
         
 # Metodo de uso 
@@ -105,7 +105,7 @@ doubly_linkedlist.print_backward()
 
 #ELIMIANDO NODO
 
-doubly_linkedlist.delete(10)
+doubly_linkedlist.delete(20)
 doubly_linkedlist.print_forward()
 doubly_linkedlist.print_backward()
 
