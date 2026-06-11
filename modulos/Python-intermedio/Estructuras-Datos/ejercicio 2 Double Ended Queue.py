@@ -11,7 +11,7 @@ class Node:
         self.next = None
         self.prev = None
         
-class Deque
+class Deque:
     def __init__(self):
         self.head = None
         self.tail = None
@@ -20,7 +20,7 @@ class Deque
     def push_left(self, data):
         new = Node(data)
         
-       if self.head is None: #vasio
+        if self.head is None: #vasio
             self.head = new
             self.tail = new
         
