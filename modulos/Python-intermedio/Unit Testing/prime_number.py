@@ -15,10 +15,10 @@ def getting_prime_numb(numb_list):
             prime_list.append(numb)
     return prime_list
 
-
-numblist = [1, 4, 6, 7, 13, 9, 67]
-the_prime_numbs = getting_prime_numb(numblist)
-print(f"Lista de numeros {numblist} los numeros primos de la lista son : {the_prime_numbs}")
+if __name__ == "__main__":
+    numblist = [1, 4, 6, 7, 13, 9, 67]
+    the_prime_numbs = getting_prime_numb(numblist)
+    print(f"Lista de numeros {numblist} los numeros primos de la lista son : {the_prime_numbs}")
 
 
 

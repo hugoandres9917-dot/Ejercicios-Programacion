@@ -16,8 +16,10 @@ def cont_cappital_lower_letter(text):
     return (cappital, lower_case)  
 
 #modo de uso
-
-my_string = "Funcione Dentro De La Programacion"
-resultado = cont_cappital_lower_letter(my_string)
-print(resultado)   # (5, 25)
+if __name__ == "__main__":
+    my_string = "Funcione Dentro De La Programacion"
+    resultado = cont_cappital_lower_letter(my_string)
+    print(resultado)   # (5, 25)
+    
+    
 

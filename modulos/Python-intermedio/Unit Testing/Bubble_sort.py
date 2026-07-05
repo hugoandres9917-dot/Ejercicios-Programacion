@@ -19,7 +19,9 @@ def bubble_sort(list_to_sort):
             break 
     return list_to_sort
 
-my_testing_list  = [1,0,2,3,4,5,6,7,8,9 ] 
-bubble_sort(my_testing_list) 
 
-print(my_testing_list)
+if __name__ == "__main__":
+    my_testing_list  = [1,0,2,3,4,5,6,7,8,9 ] 
+    bubble_sort(my_testing_list) 
+
+    print(my_testing_list)

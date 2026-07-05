@@ -17,7 +17,7 @@ def test_prime_number():
     #assert
     assert result == expected
 
-def its_prime_2():
+def test_its_prime_2():
     #arrange
 
     numb = 9
