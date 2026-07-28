@@ -1,7 +1,6 @@
 
 # Manejos de archivos
-#
-# pasar lista de canciones de un archivo a otro ordenadas
+
 def read_songs(songs):
 
     songss = []

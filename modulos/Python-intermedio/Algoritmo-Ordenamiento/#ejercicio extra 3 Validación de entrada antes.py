@@ -12,7 +12,7 @@ def validate_list(input_list):
     for element in input_list:# validar que todos los elementos sean numeros
         if not isinstance(element,( int, float)):
             raise TypeError(f"Error: Elemento invalido '{element}'. todos deben ser numeros.")
-        return True # si pasa las validaciones
+    return True # si pasa las validaciones
     
     
 def bubble_sort_with_stats(list_to_sort):
