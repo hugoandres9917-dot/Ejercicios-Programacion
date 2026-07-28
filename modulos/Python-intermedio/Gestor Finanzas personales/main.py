@@ -1,4 +1,4 @@
-#main
+#main.
 
 from ast import main
 from interfaz import run_app    

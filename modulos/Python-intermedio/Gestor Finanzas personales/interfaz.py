@@ -1,5 +1,5 @@
 
-#interfaz grafica de usuario para la gestion financiera personal
+#interfaz grafica de usuario para la gestion financiera personal.
 #con PySimpleGUI
 import PySimpleGUI as sg
 from data import load_data, save_data

@@ -1,4 +1,4 @@
-#test_logica
+#test_logica.
 
 import pytest
 from logica import FinanceManager

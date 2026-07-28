@@ -1,5 +1,5 @@
 
-#modulo de persistencia. formato JSON.
+#modulo de persistencia. formato JSON..
 
 import json
 import os

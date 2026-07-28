@@ -3,7 +3,7 @@ import uuid
 from datetime import date, datetime
 
 
-#Clase para categorias
+#Clase para categorias.
 
 class Category:
     def __init__(self, name: str):
