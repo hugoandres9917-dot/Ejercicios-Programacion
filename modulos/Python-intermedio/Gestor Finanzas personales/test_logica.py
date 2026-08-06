@@ -66,4 +66,20 @@ def test_add_movement_negative_amount():
     assert message == "El monto debe ser un número positivo."
     assert len(manager.movements) == 0
 
+def test_add_movement_invalid_amount_type():
+    manager = FinanceManager()
+    manager.add_category("Alimentacion")
+    success, message = manager.add_movement("Cena", "cincuenta", "Alimentacion", False)
+    assert success is False
+    assert message == "El monto debe ser un número válido."
+    assert len(manager.movements) == 0
     
+def test_add_movement_empty_title():
+    manager = FinanceManager()
+    manager.add_category("Alimentacion")
+    success, message = manager.add_movement("   ", 100, "Alimentacion", False)
+    assert success is False
+    assert message == "Debe ingresar un titulo válido"
+    assert len(manager.movements) == 0
+
+

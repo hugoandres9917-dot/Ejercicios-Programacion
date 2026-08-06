@@ -5,10 +5,14 @@
     ],
     "movements": [
         {
-            "Titulo": "Salario",
-            "Monto": 1000,
-            "Categoria": "Salario",
-            "Tipo": "Ingreso"
+            "Id": "4a694468",
+            "Titulo": "Comida",
+            "Monto": 5000.0,
+            "Categoria": "Alimentacion",
+            "Tipo": "Gasto",
+            "Fecha": "2026-08-05 19:17:29",
+            "Metodo de Pago": "Efectivo",
+            "Notas": "cevihes"
         }
     ]
 }

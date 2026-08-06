@@ -20,7 +20,10 @@ class Category:
 class Movement:
     def __init__(self, title: str, amount: float, category: Category, is_income: bool, 
                 payment_method: str = "Efectivo", notes: str = "", date=None):
-        self.id = str(uuid.uuid4())[:8] 
+        self.id = str(uuid.uuid4())[:8]
+        title = title.strip().title()
+        if not title:
+            raise ValueError("Debe ingresar un titulo válido")
         self.title = title.strip().title()
         self.amount = amount
         self.category = category
@@ -74,6 +77,10 @@ class FinanceManager:
                         payment_method: str = "Efectivo", notes: str = "", date=None):
         if category_name not in self.categories:
             return False, "Debe seleccionar una categoria valida"
+        try:
+            amount = float(amount)
+        except (ValueError, TypeError):
+            return False, "El monto debe ser un número válido."
         if amount <= 0:
             return False, "El monto debe ser un número positivo."
         try:
@@ -92,3 +99,38 @@ class FinanceManager:
         headers = ["Titulo", "Monto", "Categoria", "Tipo", "Fecha", "Metodo de Pago", "Notas"]
         rows = [m.to_row() for m in self.movements]
         return [headers] + rows
+
+    def delete_movement_by_id(self, movement_id: str):
+        """
+        Elimina un movimiento por su ID único.
+        """
+        for i, mov in enumerate(self.movements):
+            if mov.id == movement_id:
+                del self.movements[i]
+                return True, f"Movimiento con ID {movement_id} eliminado."
+        return False, f"No se encontró un movimiento con ID {movement_id}."
+
+    def update_movement_by_id(self, movement_id: str, **kwargs):
+        """
+        Actualiza los campos de un movimiento por su ID único.
+        kwargs puede incluir: title, amount, category, is_income, payment_method, notes, date
+        """
+        for mov in self.movements:
+            if mov.id == movement_id:
+                if "title" in kwargs:
+                    mov.title = kwargs["title"].strip().title()
+                if "amount" in kwargs:
+                    mov.amount = float(kwargs["amount"])
+                if "category" in kwargs:
+                    if kwargs["category"] in self.categories:
+                        mov.category = self.categories[kwargs["category"]]
+                if "is_income" in kwargs:
+                    mov.type = "Ingreso" if kwargs["is_income"] else "Gasto"
+                if "payment_method" in kwargs:
+                    mov.payment_method = kwargs["payment_method"]
+                if "notes" in kwargs:
+                    mov.notes = kwargs["notes"]
+                if "date" in kwargs:
+                    mov.date = kwargs["date"]
+                return True, f"Movimiento con ID {movement_id} actualizado."
+        return False, f"No se encontró un movimiento con ID {movement_id}."
