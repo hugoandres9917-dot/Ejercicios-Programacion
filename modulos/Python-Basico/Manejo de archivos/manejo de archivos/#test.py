@@ -1,4 +1,4 @@
-
+#
 def read_file(input_file):
     try:
         lines = [] # lista vacia para almacenar las lineas del archivo

@@ -1,6 +1,7 @@
 # ejercicios extra manejo de archivos
 
 # 1.Cree un programa que lea un archivo con texto línea por línea, quite los saltos de línea (\n) y escriba todo el contenido en un solo renglón en un nuevo archivo
+#
 
 #correcciones
 #En los ejercicios 1, 2 y 3, los nombres de archivo están escritos directamente en main().
