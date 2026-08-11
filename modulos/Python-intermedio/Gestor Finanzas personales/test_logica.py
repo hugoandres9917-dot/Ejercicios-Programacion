@@ -7,10 +7,10 @@ def test_add_category_success():
     # Arrange
     manager = FinanceManager()
     # Act
-    success, messsage = manager.add_category("Alimentacion")
+    success, message = manager.add_category("Alimentacion")
     # Assert
     assert success == True
-    assert messsage == "Categoria 'Alimentacion' agregada exitosamente"
+    assert message == "Categoria 'Alimentacion' agregada exitosamente"
     assert "Alimentacion" in manager.categories
 
 def test_add_category_duplicate():
