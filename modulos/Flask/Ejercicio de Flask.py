@@ -151,5 +151,18 @@ if __name__=="__main__":
 #eliminacion del bloque try except en load_task() para que el error se propague
 # si el JSON no es válido, en lugar de retornar una lista vacía.
 
+################################################################################################################
 
-    
+
+#cambios solicitados, la ruta GET /tasks arrojará un error 500 KeyNotFound.
+#actualizar archivo JSON tasks.json para que tenga los atributos en inglés y no en español,
+# y que el estado de la tarea sea "Por Hacer" en lugar de "Pendiente".
+#Cambio manual en tasks.json
+#[
+    # {
+    #     "id": 1,
+    #     "title": "Tarea de prueba",
+    #     "description": "Descripción de prueba",
+    #     "status": "Por Hacer"
+    #  }
+#]
