@@ -1,0 +1,226 @@
+function base64urlToBytes(b64url) {
+    var padLen = (4 - (b64url.length % 4)) % 4;
+    var pad = new Array(padLen + 1).join("=");
+    var b64 = (b64url + pad).replace(/-/g, "+").replace(/_/g, "/");
+    var bin = atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) {
+        bytes[i] = bin.charCodeAt(i);
+    }
+    return bytes;
+}
+
+function makeBitReader(bytes) {
+    var bitPos = 0;
+    return {
+        readBits: function (n) {
+            var val = 0;
+            for (var i = 0; i < n; i++) {
+                var byteIndex = bitPos >> 3;
+                var bitIndex = 7 - (bitPos & 7);
+                var bit = (bytes[byteIndex] >> bitIndex) & 1;
+                val = (val << 1) | bit;
+                bitPos++;
+            }
+            return val >>> 0;
+        }
+    };
+}
+
+// Returns: true (opted out) | false (opted in) | null (unknown / not listed)
+function decodeAlphonsoOptoutFromSignal(signal) {
+    // Alphonso id in the extension's signal
+    var ALPHONSO_ID = 1269;
+
+    if (typeof signal !== "string" || !signal.length) {
+        return null;
+    }
+
+    try {
+        var bytes = base64urlToBytes(signal);
+        var br = makeBitReader(bytes);
+
+        br.readBits(6);  // version
+        br.readBits(32); // timestamp
+        br.readBits(4);  // globalStatus
+
+        var numParticipants = br.readBits(12);
+
+        for (var i = 0; i < numParticipants; i++) {
+            var participantId = br.readBits(12);
+            var choiceStatus = br.readBits(4);
+
+            if (participantId === ALPHONSO_ID) {
+                if (choiceStatus === 0) return true;   // opted_out
+                if (choiceStatus === 1) return false;  // opted_in
+                return null;                           // no_choice/unknown
+            }
+        }
+
+        return null; // not listed => treat as unknown
+    } catch (e) {
+        return null;
+    }
+}
+
+// Gets optout from PMC extension messages, then cb(true/false/null)
+function getAlphonsoOptoutAsync(timeoutMs = 250) {
+  return new Promise((resolve) => {
+    function cleanup(val) {
+      window.removeEventListener("message", onMsg);
+      resolve(val);
+    }
+
+    function onMsg(event) {
+      // Keep it strict: only same-window messages
+      if (event.source !== window) return;
+      if (!event.data || typeof event.data.type !== "string") return;
+
+      if (
+        event.data.type === "ExtensionLoaded" ||
+        event.data.type === "ExtensionPing"
+      ) {
+        try {
+          window.postMessage({ type: "GetAdPreferences" }, "*");
+        } catch (e) {}
+        return;
+      }
+
+      if (event.data.type === "AdPreferences") {
+        cleanup(decodeAlphonsoOptoutFromSignal(event.data.data));
+      }
+    }
+
+    window.addEventListener("message", onMsg);
+
+    // Optional ping; safe if ignored
+    try {
+      window.postMessage({ type: "ExtensionPing" }, "*");
+    } catch (e) {}
+
+    // Don't block pixel if extension not present
+    setTimeout(() => cleanup(null), timeoutMs);
+  });
+}
+
+(function() {
+    var currentScript = document.currentScript;
+    setTimeout(function() {
+
+        function parseQueryData(urlString) {
+            var queryArray = [];        
+            if (urlString) {
+                var queryString = urlString.split('?')[1];
+                if (queryString) {
+                    var params = queryString.split('&');
+                    for(var i = 0; i < params.length; i++) {
+                        param = params[i].split('=');
+                        var name = param[0];
+                        var value = param[1];
+                        queryArray.push({ name, value });
+                    };
+                }
+
+            };
+
+            return queryArray;
+        }
+
+        var alphURL = currentScript.src;
+        var alphQueryData = parseQueryData(alphURL);
+        var alphAttributes = currentScript.attributes;
+        var alphDataset = currentScript.dataset;
+        if (alphQueryData.length > 0 || alphAttributes.length > 0) {
+            var paramString = "?prd=web";
+            var event_type = false;
+
+            for (var i = 0; i < alphQueryData.length; i++) {
+                paramString += "&"+alphQueryData[i].name+"="+alphQueryData[i].value;
+                if (alphQueryData[i].name === "event_type" && alphQueryData[i].value) {
+                    event_type = true;
+                }
+            }
+
+            for (var i = 0; i < alphAttributes.length; i++) {
+                if (alphAttributes[i].name !== "async" && alphAttributes[i].name !== "type" && alphAttributes[i].name !== "src" && alphAttributes[i].name !== "id" && alphAttributes[i].name.search(/^data-/) === -1) {
+                    paramString += "&"+alphAttributes[i].name+"="+alphAttributes[i].value;
+                }
+                if (alphAttributes[i].name === "event_type" && alphAttributes[i].value) {
+                    event_type = true;
+                }
+            }
+
+            for (const param in alphDataset) {
+                paramString += "&"+param+"="+alphDataset[param];
+                if (param === "event_type" && alphDataset[param]) {
+                    event_type = true;
+                }
+            }
+
+            if (event_type === false) {
+                paramString += "&event_type=visit";
+            }
+
+            var session_id;
+            paramString += "&version=0.1.2";
+            var timeoutValue = 18e5;
+            localStorage.getItem("session_id") && ((window.document.referrer && window.document.referrer.split("/")[2] === location.hostname) || (window.performance.navigation.type === 1 || window.performance.navigation.type === 2))
+                                                                              ? session_id = localStorage.getItem("session_id")
+                                                                                : (session_id = Math.floor(1e6 * Math.random() + 1) + Math.round((new Date).getTime()), localStorage.setItem("session_id", session_id));
+            function eventListener(e, t) {
+                document.addEventListener(e, function() {
+                    window.clearTimeout(t), t = setTimeout(function() {}, timeoutValue)
+                })
+            }
+
+            var timer = setTimeout(function() {
+                sessionEnd()
+                localStorage.removeItem("session_id")
+            }, timeoutValue);
+            eventListener("mousedown", timer), eventListener("scroll", timer);
+
+            function decode(e) {
+                return -1 != e.indexOf("%3D") ? decode(decodeURIComponent(e)) : e
+            }
+
+            function sessionEnd() {
+                acb = Math.round((new Date).getTime()), (new Image).src = "https://alpixtrack.com/ad/ord=" + acb + paramString + "&sess_status=en&sess=" + session_id + "&ref=" + encodeURIComponent(ref);
+            }
+
+            function sessionStart() {
+                var pixel_src = "https://alpixtrack.com/ad/ord=" + acb + paramString + "&utm_source=" + utm_src + "&utm_mdm=" + utm_mdm + "&url=" + encodeURIComponent(url) + "&title=" + encodeURIComponent(title) + "&sess_status=st&sess=" + session_id + "&ref=" + encodeURIComponent(ref);
+                (new Image).src = pixel_src
+            }
+
+            var utm_src = "unk",
+                utm_mdm = "unk",
+                acb = Math.round((new Date).getTime()),
+                title = window.document.title,
+                url = window.location.href,
+                ref = window.document.referrer;
+
+            (url = decode(url)).indexOf("utm_source=") > -1 && (utm_src = url.substr(url.indexOf("utm_source=") + "utm_source".length + 1).split("&")[0]), 
+            url.indexOf("utm_medium=") > -1 && (utm_mdm = url.substr(url.indexOf("utm_medium=") + "utm_medium".length + 1).split("&")[0]);
+
+            getAlphonsoOptoutAsync(100)
+                .then(function (optedOut) {
+                    if (optedOut === true) {
+                        paramString += "&optout=true";
+                    } else {
+                        paramString += "&optout=false";
+                    }
+                })
+                .catch(function () {
+                    // fail safe
+                    paramString += "&optout=false";
+                })
+                .finally(function () {
+                    sessionStart();
+
+                    window.onbeforeunload = function() {
+                        sessionEnd();
+                    };
+                });
+        }
+    }, 100)
+})();
