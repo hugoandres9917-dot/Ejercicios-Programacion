@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://www.psycopg.org/docs/ -->
+<html lang="en" data-content_root="./"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation</title>
+    <link rel="stylesheet" type="text/css" href="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/pygments.css">
+    <link rel="stylesheet" type="text/css" href="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/better.css">
+    <script async="" src="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/js"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'null');
+    </script>
+    <script src="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/documentation_options.js.download"></script>
+    <script src="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/doctools.js.download"></script>
+    <script src="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/sphinx_highlight.js.download"></script>
+    <link rel="index" title="Index" href="https://www.psycopg.org/docs/genindex.html">
+    <link rel="search" title="Search" href="https://www.psycopg.org/docs/search.html">
+    <link rel="next" title="Installation" href="https://www.psycopg.org/docs/install.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <link rel="stylesheet" href="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/psycopg.css" type="text/css">
+  </head><body>
+    <header id="pageheader"><h1><a href="https://www.psycopg.org/docs/#">
+        Psycopg 2.9.12 documentation
+    </a></h1></header>
+  <div class="related top">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          <a href="https://www.psycopg.org/docs/install.html" title="Next document">Installation</a>
+          →
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="https://www.psycopg.org/docs/#">Home</a></li> 
+    </ul>
+  </nav>
+  </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="psycopg-postgresql-database-adapter-for-python">
+<h1>Psycopg – PostgreSQL database adapter for Python<a class="headerlink" href="https://www.psycopg.org/docs/#psycopg-postgresql-database-adapter-for-python" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://psycopg.org/">Psycopg</a> is the most popular <a class="reference external" href="https://www.postgresql.org/">PostgreSQL</a> database adapter for the <a class="reference external" href="https://www.python.org/">Python</a>
+programming language.  Its main features are the complete implementation of
+the Python <a class="reference external" href="https://www.python.org/dev/peps/pep-0249/">DB API 2.0</a> specification and the thread safety (several threads can
+share the same connection). It was designed for heavily multi-threaded
+applications that create and destroy lots of cursors and make a large number
+of concurrent <code class="sql docutils literal notranslate"><span class="pre">INSERT</span></code>s or <code class="sql docutils literal notranslate"><span class="pre">UPDATE</span></code>s.</p>
+<p>Psycopg 2 is mostly implemented in C as a <a class="reference external" href="https://www.postgresql.org/docs/current/static/libpq.html">libpq</a> wrapper, resulting in being
+both efficient and secure. It features client-side and <a class="reference internal" href="https://www.psycopg.org/docs/usage.html#server-side-cursors"><span class="std std-ref">server-side</span></a> cursors, <a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#async-support"><span class="std std-ref">asynchronous communication</span></a> and <a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#async-notify"><span class="std std-ref">notifications</span></a>, <a class="reference internal" href="https://www.psycopg.org/docs/usage.html#copy"><span class="std std-ref">COPY</span></a>
+support.  Many Python types are supported out-of-the-box and <a class="reference internal" href="https://www.psycopg.org/docs/usage.html#python-types-adaptation"><span class="std std-ref">adapted to
+matching PostgreSQL data types</span></a>; adaptation can be
+extended and customized thanks to a flexible <a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#adapting-new-types"><span class="std std-ref">objects adaptation system</span></a>.</p>
+<p>Psycopg 2 is both Unicode and Python 3 friendly.</p>
+<p class="rubric">Contents</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/install.html#quick-install">Quick Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/install.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/install.html#non-standard-builds">Non-standard builds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/install.html#running-the-test-suite">Running the test suite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/install.html#if-you-still-have-problems">If you still have problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html">Basic module usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#passing-parameters-to-sql-queries">Passing parameters to SQL queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#adaptation-of-python-values-to-sql-types">Adaptation of Python values to SQL types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#transactions-control">Transactions control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#server-side-cursors">Server side cursors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#thread-and-process-safety">Thread and process safety</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#using-copy-to-and-copy-from">Using COPY TO and COPY FROM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#access-to-postgresql-large-objects">Access to PostgreSQL large objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/usage.html#two-phase-commit-protocol-support">Two-Phase Commit protocol support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/module.html">The <code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2</span></code> module content</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/module.html#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/module.html#type-objects-and-constructors">Type Objects and Constructors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/connection.html">The <code class="docutils literal notranslate"><span class="pre">connection</span></code> class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/cursor.html">The <code class="docutils literal notranslate"><span class="pre">cursor</span></code> class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html">More advanced topics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#connection-and-cursor-factories">Connection and cursor factories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#adapting-new-python-types-to-sql-syntax">Adapting new Python types to SQL syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#type-casting-of-sql-types-into-python-objects">Type casting of SQL types into Python objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#asynchronous-notifications">Asynchronous notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#asynchronous-support">Asynchronous support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#support-for-coroutine-libraries">Support for coroutine libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/advanced.html#replication-protocol-support">Replication protocol support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.extensions</span></code> – Extensions to the DB API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#classes-definitions">Classes definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#sql-adaptation-protocol-objects">SQL adaptation protocol objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#database-types-casting-functions">Database types casting functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#additional-exceptions">Additional exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#coroutines-support-functions">Coroutines support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#other-functions">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#isolation-level-constants">Isolation level constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#transaction-status-constants">Transaction status constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#connection-status-constants">Connection status constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#poll-constants">Poll constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extensions.html#additional-database-types">Additional database types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/extras.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.extras</span></code> – Miscellaneous goodies for Psycopg 2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extras.html#connection-and-cursor-subclasses">Connection and cursor subclasses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extras.html#replication-support-objects">Replication support objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extras.html#additional-data-types">Additional data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extras.html#fast-execution-helpers">Fast execution helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/extras.html#coroutine-support">Coroutine support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/errors.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.errors</span></code> – Exception classes mapping PostgreSQL errors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/errors.html#sqlstate-exception-classes">SQLSTATE exception classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/sql.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.sql</span></code> – SQL string composition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/sql.html#module-usage">Module usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/sql.html#sql-objects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sql</span></code> objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/tz.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.tz</span></code> –  <code class="docutils literal notranslate"><span class="pre">tzinfo</span></code> implementations for Psycopg 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/pool.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.pool</span></code> – Connections pooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/errorcodes.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psycopg2.errorcodes</span></code> – Error codes defined by PostgreSQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/faq.html#meta">Meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/faq.html#problems-with-transactions-handling">Problems with transactions handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/faq.html#problems-with-type-conversions">Problems with type conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/faq.html#best-practices">Best practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/faq.html#problems-compiling-and-installing-psycopg2">Problems compiling and installing psycopg2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/news.html">Release notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#current-release">Current release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-9">What’s new in psycopg 2.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-8">What’s new in psycopg 2.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-7">What’s new in psycopg 2.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-6">What’s new in psycopg 2.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-5">What’s new in psycopg 2.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-4">What’s new in psycopg 2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-3">What’s new in psycopg 2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-2">What’s new in psycopg 2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/news.html#what-s-new-in-psycopg-2-0">What’s new in psycopg 2.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://www.psycopg.org/docs/license.html">License</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/license.html#psycopg2-and-the-lgpl">psycopg2 and the LGPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://www.psycopg.org/docs/license.html#alternative-licenses">Alternative licenses</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p class="rubric">Indices and tables</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://www.psycopg.org/docs/genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="https://www.psycopg.org/docs/py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="https://www.psycopg.org/docs/search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h3>Quick search</h3>
+<form class="search" action="https://www.psycopg.org/docs/search.html" method="get">
+  <input type="text" name="q" placeholder="type to search" fdprocessedid="tjwkl2">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="related bottom">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          <a href="https://www.psycopg.org/docs/install.html" title="Next document">Installation</a>
+          →
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="https://www.psycopg.org/docs/#">Home</a></li> 
+    </ul>
+  </nav>
+  </div>
+  <footer id="pagefooter">© 2001-2021, Federico Di Gregorio, Daniele Varrazzo, The Psycopg Team.
+
+  </footer>
+
+  
+  <script type="module" src="./Psycopg – PostgreSQL database adapter for Python — Psycopg 2.9.12 documentation_files/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;fd1fd7e322bb48aaab6414c3a1ead9d8&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+<span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span></body></html>

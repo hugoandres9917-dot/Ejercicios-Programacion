@@ -1,0 +1,1 @@
+if (typeof(console) !== 'undefined' && typeof(console.log) !== 'undefined') { console.log('🍱 Bento is not live on this account. Please contact Jesse@Bentonow.com or chat to us on chat to find out why.') }

@@ -1,0 +1,357 @@
+!function() {
+  function isAttributionScript(script) {
+    src = script.getAttribute('src');
+    if(!src)
+      return false;
+    else if(src.indexOf('attribution-integrations') > -1)
+      return true;
+    else
+      return false;
+  }
+
+  function parseQuery(query) {
+    var paramsObj = new Object();
+    if (!query) return paramsObj; // return empty object
+    var pairs = query.split(/[;&]/);
+    for (var i = 0; i < pairs.length; i++) {
+      var KeyVal = pairs[i].split('=');
+      if (!KeyVal || KeyVal.length != 2) continue;
+      var key = unescape(KeyVal[0]);
+      var val = unescape(KeyVal[1]);
+      val = val.replace(/\+/g, ' ');
+      paramsObj[key] = val;
+    }
+    return paramsObj;
+  }
+
+  var myScript = null;
+  var scripts = document.getElementsByTagName('script');
+  for (var i = 0; i < scripts.length; ++i) {
+    if (isAttributionScript(scripts[i])) {
+      myScript = scripts[i];
+      break;
+    }
+  }
+  var queryString = myScript.src.replace(/^[^\?]+\??/,'');
+  var params = parseQuery(queryString);
+  var projectId = params['attributionProjectId'];
+  var shouldFirePage = false;
+  var onAttributionReady = null;
+  var hsPortalId = null;
+  var bigcommerceAppClientId = params['bigcCliId'];
+
+  if (projectId) {
+    if (!window.Attribution) {
+      window.Attribution=[];if(!Attribution.initialize)if(Attribution.invoked)window.console&&console.error&&console.error("Attribution snippet included twice.");else{Attribution.invoked=!0,Attribution.methods=["setAnonymousId","trackSubmit","trackClick","initialize","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"],Attribution.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);return t.unshift(e),Attribution.push(t),Attribution}};for(var t=0;t<Attribution.methods.length;t++){var e=Attribution.methods[t];Attribution[e]=Attribution.factory(e)}Attribution.load=function(t,e){var i=document.createElement("script");i.type="text/javascript",i.async=!0,i.src="https://scripts.attributionapp.com/v2/attribution.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(i,r),e=e||{},e.projectId=t,Attribution._loadOptions=e},Attribution.SNIPPET_VERSION="4.1.0";
+        var trackingHost = params['attributionTrackingHost'];
+        if (trackingHost) {
+          Attribution.load(projectId, { apiHost: trackingHost });
+        } else {
+          Attribution.load(projectId);
+        }
+        shouldFirePage = true;
+      }
+    }
+    // else all good - Attribution is already loaded
+  } else {
+    // fallback try to resolve projectId from current Instance
+    try {
+      projectId = Attribution._integrations.Attribution.options.projectId;
+    } catch (e) { }
+  }
+
+  // (Legacy) HubSpot
+  // Hubspot: Track Form Submit
+  function hsTrackFormSubmit(event) {
+    var hsForm = event.target;
+    // HS input fields names -> ATB identify traits mapping
+    var formMapping = {
+      email:     'email',
+      firstname: 'first_name',
+      lastname:  'last_name',
+      company:   'company_name',
+      jobtitle:  'job_title',
+      phone:     'phone',
+      zip:       'zip'
+    };
+
+    var traits = {};
+    for (var key in formMapping) {
+      var input = hsForm.querySelector('input[name=' + key + ']');
+      if (input) {
+        traits[formMapping[key]] = input.value;
+      }
+    }
+
+    // TODO prevent from running if other method fires
+    Attribution.identify(traits);
+    Attribution.track('HubSpot Form Submitted', { atbHubspotFormTrackingMethod: 'legacy' });
+  }
+
+  // Hubspot: Bind to iframe forms
+  var hsFormIframes = document.getElementsByClassName('hs-form-iframe');
+  for (var iframe of hsFormIframes) {
+    iframe.contentDocument.body.addEventListener('hsvalidatedsubmit', hsTrackFormSubmit);
+  }
+
+  // Hubspot: Bind to form on HS pages
+  window.addEventListener('hsvalidatedsubmit', hsTrackFormSubmit);
+  // (Legacy) HubSpot End
+
+  // HubSpot v2
+  function detectHubspot() {
+    // HubSpot try to grab portal_id
+    hsPortalId = window.hsVars && window.hsVars.portal_id;
+
+    // HubSpot: Listen for form submission
+    window.addEventListener('message', function(event) {
+      try {
+        // "message_callback" method
+        if (event.data && (event.data.type == 'hsFormCallback') && (event.data.eventName == 'onFormSubmitted')) {
+          var eventData = event.data.data;
+          var payload = {
+            portalId: hsPortalId,
+            projectId: projectId,
+            anonymousId: Attribution.user().anonymousId(),
+            formGuid: (eventData['formGuid'] || event.data.id), // also "event.data.id"
+            conversionId: eventData['conversionId']
+          };
+
+          fetch('https://api.attributionapp.com/integrations/hubspot/form_submission', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+
+          var submissionValues = eventData['submissionValues'] || {};
+          delete(submissionValues['hs_context']);
+          submissionValues['formGuid'] = eventData['formGuid'];
+          submissionValues['conversionId'] = eventData['conversionId'];
+          submissionValues['atbHubspotFormTrackingMethod'] = 'message_callback';
+
+          Attribution.track('HubSpot Form Submitted', submissionValues);
+          if (submissionValues['email']) {
+            Attribution.identify({ email: submissionValues['email'] });
+          }
+        } else if (event.origin == 'https://forms.hubspot.com') {
+          // "message_origin" method
+          // HubSpot alternative forms tracking like popup
+          var submissionValues = event.data || {};
+          submissionValues['atbHubspotFormTrackingMethod'] = 'message_origin';
+          Attribution.track('HubSpot Form Submitted', submissionValues);
+          if (submissionValues['email']) {
+            Attribution.identify({ email: submissionValues['email'] });
+          }
+
+          var payload = JSON.parse(JSON.stringify(event.data));
+          payload['portalId'] = hsPortalId;
+          payload['projectId'] = projectId;
+          payload['anonymousId'] = Attribution.user().anonymousId();
+
+          fetch('https://api.attributionapp.com/integrations/hubspot/form_submission', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+        }
+      } catch (e) {
+        Attribution.track('HubSpot Form Tracking Failed', e);
+      }
+    });
+
+    // HubSpot: Listen for chat conversations
+    if (window.HubSpotConversations) {
+      trackHubspotConversations();
+    } else {
+      window.hsConversationsOnReady = [trackHubspotConversations];
+    }
+  }
+
+  function trackHubspotConversations() {
+    var conversationId = null;
+    window.HubSpotConversations.on('conversationStarted', function(event) {
+      conversationId = event.conversation.conversationId;
+      Attribution.track('HubSpot Conversation Started', {
+        conversationId: conversationId
+      });
+    });
+
+    window.HubSpotConversations.on('contactAssociated', function(event) {
+      Attribution.track('HubSpot Conversation Contact Associated', {
+        conversationId: conversationId
+      });
+
+      fetch('https://api.attributionapp.com/integrations/hubspot/conversation_associated', {
+        method: 'POST',
+        body: JSON.stringify({
+          portalId: hsPortalId,
+          projectId: projectId,
+          anonymousId: Attribution.user().anonymousId(),
+          conversationId: conversationId
+        })
+      });
+    });
+  }
+  // HubSpot v2 end
+
+  // Marketo: Track Form
+  if (typeof(MktoForms2) != "undefined") {
+    MktoForms2.whenReady(function(form) {
+      form.onSubmit(function(form) {
+        var exclude = ['formid', 'lpId', 'subId', 'munchkinId', 'lpurl', 'cr', 'kw', 'q'];
+        var values = form.getValues();
+        var keys = Object.keys(values);
+        var traits = {};
+
+        keys.forEach(function(key) {
+          if (exclude.indexOf(key) == -1) {
+            traits[key] = values[key];
+          }
+        });
+
+        Attribution.identify(traits);
+        Attribution.track('Marketo Form Submitted');
+      });
+    });
+  }
+
+  // Shopify
+  function identifyShopifyCustomer(retryNo) {
+    if (Shopify.checkout.customer_id && Shopify.checkout.email) {
+      Attribution.identify(Shopify.checkout.customer_id, {
+        email: Shopify.checkout.email,
+      });
+    } else if (retryNo < 10) {
+      setTimeout(function() {
+        identifyShopifyCustomer(retryNo + 1)
+      }, 1000);
+    }
+  }
+
+  if (typeof(Shopify) != "undefined") {
+    onAttributionReady = function() {
+      try {
+        var user_id = ShopifyAnalytics.lib.trekkie.lastPage.properties.customerId;
+        if (user_id > 0) {
+          window.Attribution.identify(user_id);
+        }
+      } catch (e) { }
+
+      var request = new XMLHttpRequest();
+      request.open('POST', '/cart/update.js', true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      request.send('attributes[analytics_anonymous_id]=' + Attribution.user().anonymousId());
+    }
+
+    if (typeof(Shopify.Checkout) != "undefined" && typeof(Shopify.Checkout.OrderStatus) != "undefined" && typeof(Shopify.checkout) != "undefined") {
+      identifyShopifyCustomer(0);
+    }
+  }
+
+  // BigCommerce
+  function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+    // TODO validate
+  }
+
+  function fetchBigcCart(eventSource) {
+    fetch('/api/storefront/carts', { credentials: 'same-origin' })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Response is not ok');
+        }
+        return response.json();
+      })
+      .then(data => processBigcCart(data, eventSource))
+      .catch(error => {});
+  }
+  function processBigcCart(data, eventSource) {
+    var cart = data[0];
+
+    if (!cart) {
+      if (eventSource !== 'add_to_cart') {
+        // Attach to "add item" button
+        if (window.stencilUtils) {
+          window.stencilUtils.hooks.on('cart-item-add-remote', function () {
+            fetchBigcCart('add_to_cart');
+          })
+        }
+      }
+      return;
+    }
+
+    if ((cart.customerId == '0') || (cart.customerId == 0)) {
+      cart.customerId = undefined;
+    }
+    if (cart.email) {
+      Attribution.identify(cart.customerId, { email: cart.email });
+    }
+
+    if (cart.id) {
+      var newAnonId = 'bigc-' + cart.id;
+      var prevAnonId = Attribution.user().anonymousId();
+
+      if (newAnonId != prevAnonId) {
+        Attribution.setAnonymousId(newAnonId);
+
+        if (!trackingHost) {
+          trackingHost = 'track.attributionapp.com';
+        }
+        // manually alias anonymous to new id
+        // TODO why not fire Attribution.alias() instead?
+        fetch('https://' + trackingHost + '/v1/a', {
+          method: 'POST',
+          body: JSON.stringify({
+            'projectId': projectId,
+            'previousId': prevAnonId,
+            'anonymousId': newAnonId,
+            'type': 'alias'
+          })
+        });
+      }
+    }
+  }
+
+  function bigcCustomer(data) {
+    if (data.customer) {
+      Attribution.identify(data.customer.id, {
+        email: data.customer.email
+      });
+    }
+  }
+
+  if (bigcommerceAppClientId) {
+    onAttributionReady = function() {
+      // anonymousId doesn't start with "bigc-"
+      if (Attribution.user().anonymousId().substring(0, 5) != 'bigc-') {
+        fetchBigcCart();
+      }
+
+      // USER_ID not set
+      if (!Attribution.user().id()) {
+        // another way /internalapi/v1/checkout/quote?includes=customer
+        fetch('/customer/current.jwt?app_client_id=' + bigcommerceAppClientId)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Response is not ok');
+            }
+            return response.text();
+          })
+          .then(data => bigcCustomer(parseJwt(data)))
+          .catch(error => {});
+      }
+    }
+  }
+
+  // common ready handler
+  Attribution.ready(function() {
+    onAttributionReady && onAttributionReady();
+    detectHubspot();
+  });
+
+  shouldFirePage && window.Attribution.page();
+}();

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://git-scm.com/install/windows -->
+<html lang="en" class=" js fontface"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+    
+    const currentTheme = localStorage.getItem("theme")
+    if (currentTheme) {
+      
+      const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      if (prefersDarkScheme === (currentTheme === "dark")) localStorage.removeItem("theme")
+      else if ((prefersDarkScheme && currentTheme === "light")
+        || (!prefersDarkScheme && currentTheme === "dark")) {
+	document.documentElement.dataset.theme = currentTheme
+      }
+    }
+  </script>
+
+  
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Git - Install for Windows</title>
+
+  <link href="https://git-scm.com/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+  
+  <link rel="stylesheet" href="./Git - Install for Windows_files/application.min.1735659ab01277d1a47a6bf1697bf1323e6c5d3ac218e80b6fbeed5eee146237.css" integrity="sha256-FzVlmrASd9GkemvxaXvxMj5sXTrCGOgLb77tXu4UYjc=">
+  <script src="./Git - Install for Windows_files/modernizr.js.download"></script>
+  
+
+</head>
+
+<body id="install">
+
+  <div class="inner">
+    <header>
+  <a id="logo" href="https://git-scm.com/"><img src="./Git - Install for Windows_files/logo@2x.png" width="110" height="46" alt="Git" class="no-filter"></a>
+  <span id="tagline">--everything-is-local</span>
+  <script type="text/javascript">
+   const taglines = [
+     "fast-version-control",
+     "everything-is-local",
+     "distributed-even-if-your-workflow-isnt",
+     "local-branching-on-the-cheap",
+     "distributed-is-the-new-centralized"
+   ];
+   var tagline = taglines[Math.floor(Math.random() * taglines.length)];
+   document.getElementById('tagline').innerHTML = '--' + tagline;
+  </script>
+
+  
+  <div id="search-container">
+    <form id="search" action="https://git-scm.com/search/results">
+      <input id="search-text" name="search" placeholder="Type / to search entire site…" autocomplete="off" type="text">
+    </form>
+    <div id="search-results"></div>
+  </div>
+  
+  <img src="./Git - Install for Windows_files/light-mode.svg" id="dark-mode-button" class="active">
+</header>
+
+  </div> 
+
+  
+    <div class="inner">
+      <div id="content-wrapper">
+        
+<div tabindex="1" class="sidebar-btn"></div>
+<aside class="sidebar" id="sidebar">
+  <nav>
+    <ul>
+      <li>
+        <a href="https://git-scm.com/about">About</a>
+        <ul>
+          <li>
+            <a href="https://git-scm.com/about/trademark">Trademark</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="https://git-scm.com/learn">Learn</a>
+        <ul>
+          <li>
+            <a href="https://git-scm.com/book">Book</a>
+          </li>
+          <li>
+            <a href="https://git-scm.com/cheat-sheet">Cheat Sheet</a>
+          </li>
+          <li>
+            <a href="https://git-scm.com/videos">Videos</a>
+          </li>
+          <li>
+            <a href="https://git-scm.com/doc/ext">External Links</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="https://git-scm.com/tools">Tools</a>
+        <ul>
+          <li>
+            <a href="https://git-scm.com/tools/command-line">Command Line</a>
+          </li>
+          <li>
+            <a href="https://git-scm.com/tools/guis">GUIs</a>
+          </li>
+          <li>
+            <a href="https://git-scm.com/tools/hosting">Hosting</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="https://git-scm.com/docs">Reference</a>
+      </li>
+      <li>
+        <a href="https://git-scm.com/install/windows" class="install-link active">Install</a>
+      </li>
+      <li>
+        <a href="https://git-scm.com/community">Community</a>
+        <ul>
+          
+        </ul>
+      </li>
+    </ul>
+
+    
+    
+
+    
+      <hr class="sidebar">
+      <div class="callout">
+  <p>The entire <strong><a href="https://git-scm.com/book">Pro Git book</a></strong> written
+  by Scott Chacon and Ben Straub is available to <a href="https://git-scm.com/book">read online for free</a>.
+  Dead tree versions are available on <a href="https://www.amazon.com/Pro-Git-Scott-Chacon/dp/1484200772?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1430218339&amp;linkCode=as2&amp;tag=git-sfconservancy-20">Amazon.com</a>.
+  </p>
+</div>
+
+    
+  </nav>
+</aside>
+
+        <div id="content" data-pagefind-filter="category:install" data-pagefind-weight="0.05" data-pagefind-body="">
+          
+            
+<div id="main">
+  <div class="install">
+    <div class="install-header">
+      <h1>Install</h1>
+      <div class="version-badge">
+        Latest version: 2.55.0
+        (<a href="https://gitlab.com/git-scm/git/-/blob/HEAD/Documentation/RelNotes/2.55.0.adoc">Release Notes</a>)
+      </div>
+    </div>
+  
+    <nav class="install-tabs" role="tablist" aria-label="Installation options">
+      <a href="https://git-scm.com/install/windows" role="tab" aria-current="page" aria-selected="true">
+        <span>Windows</span>
+      </a>
+      <a href="https://git-scm.com/install/mac" role="tab" aria-selected="false">
+        <span>macOS</span>
+      </a>
+      <a href="https://git-scm.com/install/linux" role="tab" aria-selected="false">
+        <span>Linux</span>
+      </a>
+      <a href="https://git-scm.com/install/source" role="tab" aria-selected="false">
+        <span>Build from Source</span>
+      </a>
+    </nav>
+
+
+    <div class="install-content">
+  <p>
+  <strong><a id="auto-download-link" href="https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.5/Git-2.55.0.5-64-bit.exe">Click here to download </a></strong>
+    the latest (<strong id="auto-download-version">2.55.0(5)</strong>)
+    <strong id="auto-download-architecture">x64</strong> version of <strong>Git for Windows</strong>.
+    This is the most recent <a href="https://git-for-windows.github.io/">maintained build</a>.
+    It was released <span id="relative-release-date"><strong>18 days ago</strong>, </span>on <span id="auto-download-date">2026-08-20</span>.
+  </p>
+  <h3>Other Git for Windows downloads</h3>
+  <h4>Standalone Installer</h4>
+  <p>
+    <strong><a href="https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.5/Git-2.55.0.5-64-bit.exe">Git for Windows/x64 Setup</a>.</strong>
+  </p>
+  <p>
+    <strong><a href="https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.5/Git-2.55.0.5-arm64.exe">Git for Windows/ARM64 Setup</a>.</strong>
+  </p>
+  <h4>Portable ("thumbdrive edition")</h4>
+  <p>
+    <strong><a href="https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.5/PortableGit-2.55.0.5-64-bit.7z.exe">Git for Windows/x64 Portable</a>.</strong>
+  </p>
+  <p>
+    <strong><a href="https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.5/PortableGit-2.55.0.5-arm64.7z.exe">Git for Windows/ARM64 Portable</a>.</strong>
+  </p>
+  <h4>Using winget tool</h4>
+  <p>
+    Install <a href="https://docs.microsoft.com/en-us/windows/package-manager/winget">winget tool</a> if you don't already have it, then type this command in command prompt or Powershell.<br>
+    <code>winget install --id Git.Git -e --source winget</code>
+  </p>
+  <p class="small">
+    The current source code release is version <strong>2.55.0</strong>.
+    If you want the newer version, you can build it from <a href="https://github.com/git-for-windows/git">the source code</a>.
+  </p>
+
+  <h2>Now What?</h2>
+  <p>
+    Now that you have downloaded Git, it's time to start using it.
+  </p>
+  <ul id="download-next-steps">
+    <li>
+      <a href="https://git-scm.com/book">
+      <img src="./Git - Install for Windows_files/nav-read-book.png">
+      <h3>Read the Book</h3>
+      <p>Dive into the Pro Git book and learn at your own pace.</p>
+      </a>
+    </li>
+    <li>
+      <a href="https://git-scm.com/downloads/guis">
+      <img src="./Git - Install for Windows_files/nav-download-gui.png">
+      <h3>Download a GUI</h3>
+      <p>Several free and commercial GUI tools are available for the Windows platform.</p>
+      </a>
+    </li>
+    <li>
+      <a href="https://git-scm.com/community">
+      <img src="./Git - Install for Windows_files/nav-get-involved.png">
+      <h3>Get Involved</h3>
+      <p>A knowledgeable Git community is available to answer your questions.</p>
+      </a>
+    </li>
+  </ul>
+
+    </div>
+  </div>
+</div>
+
+          
+        </div>
+      </div>
+      
+      <footer>
+  <div class="site-source">
+    <a href="https://git-scm.com/site">About this site</a><br>
+    Patches, suggestions, and comments are welcome.
+  </div>
+  <div class="sfc-member">
+    Git is a member of <a href="https://git-scm.com/sfc">Software Freedom Conservancy</a>
+  </div>
+</footer>
+
+<script src="./Git - Install for Windows_files/jquery-3.7.1.min.js.download"></script>
+<script src="./Git - Install for Windows_files/jquery-ui.min.js.download"></script>
+<script src="./Git - Install for Windows_files/jquery.defaultvalue.js.download"></script>
+<script src="./Git - Install for Windows_files/session.min.js.download"></script>
+
+<script src="./Git - Install for Windows_files/application.min.9fa9fb38ef6c02fbb5e3624499214101f82d3b15ce4ba8856f64c2c3456798c8.js.download" integrity="sha256-n6n7OO9sAvu142JEmSFBAfgtOxXOS6iFb2TCw0VnmMg="></script>
+
+    </div>
+  
+
+
+
+
+</body></html>

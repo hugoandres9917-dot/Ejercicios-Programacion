@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://ericnormand.me/article/global-mutable-state -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><title>Global Mutable State</title><meta content="Global mutable state is one of the biggest drivers of complexity in software systems. We tackle a definition and how to reduce our reliance on it." name="description"><link href="https://ericnormand.me/favicon.ico" rel="icon"><link href="./Global Mutable State_files/style.css" rel="stylesheet"><link href="./Global Mutable State_files/tomorrow-night-blue.min.css" rel="stylesheet" type="text/css"><script defer="defer" src="./Global Mutable State_files/highlight.min.js.download"></script><script defer="defer" src="./Global Mutable State_files/clojure.min.js.download"></script><script defer="defer" src="./Global Mutable State_files/json.min.js.download"></script><script defer="defer" src="./Global Mutable State_files/javascript.min.js.download"></script><script defer="defer" src="./Global Mutable State_files/xml.min.js.download"></script><script>window.onload = () => setTimeout(() => typeof hljs !== 'undefined' && hljs.highlightAll(), 100);</script><script data-site="QAICNRUR" defer="defer" src="./Global Mutable State_files/script.js.download"></script><script async="async" defer="defer" src="./Global Mutable State_files/d54a3b8ab2d0b8cdf94928f986eba33c.js.download"></script><script>window.addEventListener("bento:ready", function () {
+  if (typeof(bento$) != 'undefined') {
+    bento$(function() {
+        bento.view();
+    });
+  }
+});</script><link href="https://ericnormand.me/article/global-mutable-state" rel="canonical"><meta content="summary_large_image" name="twitter:card"><meta content="@ericnormand" name="twitter:site"><meta content="Global Mutable State" name="twitter:title"><meta content="Global mutable state is one of the biggest drivers of complexity in software systems. We tackle a definition and how to reduce our reliance on it." name="twitter:description"><meta content="article" property="og:type"><meta content="https://ericnormand.me/article/global-mutable-state" property="og:url"><meta content="Global Mutable State" property="og:title"><meta content="Global mutable state is one of the biggest drivers of complexity in software systems. We tackle a definition and how to reduce our reliance on it." property="og:description"><link href="https://ericnormand.me/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"><link href="https://ericnormand.me/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"><link href="https://ericnormand.me/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"><link href="https://ericnormand.me/site.webmanifest" rel="manifest"></head><body class="w-full m-0 p-0"><header class="px-4 sm:px-6 lg:px-8 lg:max-w-7xl mx-auto mb-8 mt-2"><div class="max-w-prose lg:max-w-full mx-auto flex flex-wrap relative justify-between text-indigo-600"><div class="flex-0 md:flex-1 align-middle mr-4"><a class="text-xl font-semibold font-baseline font-head navigation" href="https://ericnormand.me/">Eric Normand</a></div><div class="flex-0 md:mr-auto align-baseline font-head flex space-x-10 navigation" style="margin-top: 2px"><a class="navigation" href="https://ericnormand.me/podcast">Podcast</a><a class="navigation" href="https://ericnormand.me/clojure">Clojure</a><a class="navigation" href="https://ericnormand.podia.com/">Courses</a><a class="navigation" href="https://grokkingsimplicity.com/">Book</a></div></div></header><div class="text-primary"><div class="px-4 sm:px-6 lg:px-8 max-w-full lg:max-w-7xl mx-auto"><article class="mx-auto lg:max-w-full wide-code"><h1 class="mb-4 font-bold font-head text-4xl lg:text-5xl" id="title">Global Mutable State</h1><div class="prose prose-xl text-xs by-line-for-hiding">Written by Eric Normand. Published: January 7, 2016. Updated: August 17, 2018.</div><div class="prose lg:prose-xl mt-8"><div class="not-prose"><div class="border border-gray-200 overflow-hidden rounded-lg px-0 drop-shadow-md bg-white top-optin-for-hiding flex flex-col lg:flex-row justify-between" style="min-width:398px"><div class="flex flex-row flex-shrink-0 mx-auto lg:mx-0"><img alt="Grokking Simplicity (book cover)" class="lg:m-0" src="./Global Mutable State_files/Grokking-Simplicity.jpg" style="margin-top:0;margin-bottom:0" width="160"><div class="flex flex-col text-left text-sm justify-around ml-2 mr-4"><div>👍 Into to FP</div><div>👍 Beginner-friendly</div><div>👍 Quick read</div><div>👍 Exercises</div><div>👍 Fun!</div></div></div><div class="flex-1 p-2 pt-4 text-center lg:text-left flex-shrink max-w-md"><div><span class="italic text-2xl font-bold">Grokking Simplicity</span></div><div class="text-sm">by Eric Normand</div><div class="flex flex-col lg:flex-row mt-4 max-w-sm"><div class="mr-2 flex-shrink-0"><img alt="Jo Van Eyck" class="rounded-full mx-auto" src="./Global Mutable State_files/jo-van-eyck.jpg" style="margin-top:0;margin-bottom:0" width="30"></div><div class="text-xs"><span class="font-bold">Jo Van Eyck</span><br><span class="italic">“Grokking Simplicity is by far the gentlest introduction to FP I’ve encountered and I’ve been recommending it to people that want an on-ramp to FP ever since.”</span></div></div><div class="rounded-md shadow mt-4 block mx-auto w-60"><a class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-2 md:text-lg md:px-4 no-underline" href="https://lispcast.com/gs">Buy on Amazon</a></div></div></div></div><p>Summary: <em>Global mutable state is one of the biggest drivers of
+complexity in software systems. We tackle a definition and how to reduce
+our reliance on it.</em></p>
+<p>One of the biggest problems in software is global mutable state. It
+makes your code difficult to work with, and once you go down the road,
+it keeps getting worse. Reducing the amount of global mutable state in
+your program is one of the best ways to improve the quality of your
+code, regardless of whether it's procedural or functional.</p>
+<h3><a href="https://ericnormand.me/article/global-mutable-state#definition" id="definition"></a>Definition</h3>
+<p>Global mutable state has three words, and each is important:</p>
+<p><strong><em>Global</em></strong> means that it's accessible from any other point in your
+code. This ties all of your code together. You have to reason about the
+whole program instead of reasoning about a small part, because any other
+part can touch it.</p>
+<p><strong><em>Mutable</em></strong> means that it can be changed. You'll usually see that
+anyone who can read the value can also change it. Two reads right next
+to each other in the code might return different values. Or, worse, the
+data structures they return themselves are changing, even after a read.</p>
+<p><strong><em>State</em></strong> is harder to define. But it basically means that the value
+depends on the history of the program. How far into the history? Well,
+in the worst case (namely, global mutable state), it means the entire
+history. <strong>You have to know everything about how the program was
+executed</strong>, including how threads were interleaved.</p>
+<p>When you combine global, mutable, and state, you get a big mess. When
+people say "it's hard to reason about", <strong>what they really mean is "it's
+got bugs and you can't tell by reading the code"</strong>.</p>
+<p>The nice thing is that you can systematically remove those same three
+aspects. And you can remove them more or less separately. I like to say
+that <strong>it's possible to program functionally in any language</strong>, even the
+most procedural languages out there. One way to do that is to reduce the
+amount of global mutable state as close to zero as you can.</p>
+<h3><a href="https://ericnormand.me/article/global-mutable-state#identifying-global-mutable-state" id="identifying-global-mutable-state"></a>Identifying Global Mutable State</h3>
+<p>Some telltale signs: multiple variables in the global scope (in Clojure:
+multiple <a href="https://ericnormand.me/guide/clojure-concurrency#atom">atoms</a> in the toplevel of a
+namespace), reading and writing to the globals with no clear
+<a href="https://ericnormand.me/guide/clojure-collections#patterns">patterns</a> (or reading from the
+globals multiple times in a small piece of code). The variable could
+have changed values between reads.</p>
+<h3><a href="https://ericnormand.me/article/global-mutable-state#cleaning-up" id="cleaning-up"></a>Cleaning up</h3>
+<p>It's actually hard to get rid of global mutable state once it's in there. Its
+usage will spread if it's not tied down. Global mutable state is useful for many
+different purposes. After a while, it's hard to see what the usage patterns are
+and how you would go about replacing them. But we can tackle each of the naughty
+aspects in turn.</p>
+<h4><a href="https://ericnormand.me/article/global-mutable-state#1-does-the-variable-need-to-be-global" id="1-does-the-variable-need-to-be-global"></a>1) Does the variable need to be global?</h4>
+<p>Maybe you can rework the code so that an object is passed into functions
+instead of being a global variable. That would mean you can create a new
+instance each time you run the code, which at least guarantees that it
+is starting from a known value each time and that you are encapsulating
+the mutation in different executions.</p>
+<p>In other words, <strong>turn global variables into local variables</strong>. The best
+is local to the function doing the mutation (or smaller scope, if
+possible). Next best is an instance variable on a local object.</p>
+<p>It's very tempting to use globals because they're an easy way for
+different parts of the code to work together. Here's an example:</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">var</span> file;
+<span class="hljs-keyword">var</span> recordCount;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">readFile</span>(<span class="hljs-params"></span>) {
+  file = <span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">countRecords</span>(<span class="hljs-params"></span>) {
+  recordCount = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    recordCount++;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">generateOutput</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    <span class="hljs-title function_">print</span>(c + <span class="hljs-string">","</span> + recordCount);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-title function_">readFile</span>();
+  <span class="hljs-title function_">countRecords</span>();
+  <span class="hljs-title function_">generateOutput</span>();
+}
+</code></pre>
+<p>the dreaded global variables</p>
+<p>global mutation here</p>
+<p>global read</p>
+<p>global mutation here</p>
+<p>these lines have to be in this order</p>
+<p>Let's try to make the variables less global using the technique above.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">readFile</span>(<span class="hljs-params">state</span>) {
+  state.<span class="hljs-property">file</span> = <span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">countRecords</span>(<span class="hljs-params">state</span>) {
+  <span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> state.<span class="hljs-property">file</span>.<span class="hljs-title function_">lines</span>()) {
+    x++;
+  }
+  state.<span class="hljs-property">recordCount</span> = x;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">generateOutput</span>(<span class="hljs-params">state</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> state.<span class="hljs-property">file</span>.<span class="hljs-title function_">lines</span>()) {
+    <span class="hljs-title function_">print</span>(c + <span class="hljs-string">","</span> + state.<span class="hljs-property">recordCount</span>);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> state = {};
+  <span class="hljs-title function_">readFile</span>(state);
+  <span class="hljs-title function_">countRecords</span>(state);
+  <span class="hljs-title function_">generateOutput</span>(state);
+}
+</code></pre>
+<p>got rid of the globals</p>
+<p>functions now take the state</p>
+<p>see, the state is now an argument</p>
+<p>use a local here, instead of storing intermediate values in the global</p>
+<p>then assign the state once</p>
+<p>state as argument, again</p>
+<p>the state is now local (still mutable, still state)</p>
+<p>The biggest transformation we do is to pass a <code>state</code> object to each of
+the methods. It is no longer global. Each time we run <code>processFile</code> we
+will generate a new instance. We start from a known initial state and we
+know we won't have any contention for that object.</p>
+<p>The other transformation we did was to rely more on local variables for
+accumulating intermediate values. This may seem trivial, but it means
+that at no point does our state object contain inconsistent data. <strong>It
+either does not contain the data or it's correct.</strong></p>
+<h4><a href="https://ericnormand.me/article/global-mutable-state#2-does-it-need-to-be-mutable" id="2-does-it-need-to-be-mutable"></a>2) Does it need to be mutable?</h4>
+<p>Are there functions that read from but don't write to the variable? They
+could be changed to take the current value as an argument. Reducing the
+amount of code that relies on those particular variables is a good
+thing.</p>
+<p>In other words, do as much work as possible using only the arguments and
+return values of your functions. Isolate the mutation of the variable to
+a small portion of your code.</p>
+<p>Let's apply this technique to code we just modified.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">readFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">countRecords</span>(<span class="hljs-params">file</span>) {
+  <span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    x++;
+  }
+  <span class="hljs-keyword">return</span> x;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">generateOutput</span>(<span class="hljs-params">file, recordCount</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    <span class="hljs-title function_">print</span>(c + <span class="hljs-string">","</span> + recordCount);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> file = <span class="hljs-title function_">readFile</span>();
+  <span class="hljs-keyword">var</span> recordCount = <span class="hljs-title function_">countRecords</span>(file);
+  <span class="hljs-title function_">generateOutput</span>(file, recordCount);
+}
+</code></pre>
+<p>instead of mutating state, just return the value</p>
+<p>take just the state you need as arguments</p>
+<p>return the value you calculate</p>
+<p>take the two values you need as arguments</p>
+<p>then use local variables (initialized but never mutated)</p>
+<p>We've translated code that wrote to a mutable argument into code that
+merely returns the value it calculates. Then we use local variables to
+hold the return values for later. Notice how <code>readFile</code> is doing so
+little work now (it's just a function call) that maybe we will want to
+remove it and just call the <code>openFile</code> directly. That is up to you to
+decide, but it's one of the things I notice a lot when removing
+mutation: functions become trivial to read and write, and often they are
+so trivial you will want to inline them.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">countRecords</span>(<span class="hljs-params">file</span>) {
+  <span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    x++;
+  }
+  <span class="hljs-keyword">return</span> x;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">generateOutput</span>(<span class="hljs-params">file, recordCount</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    <span class="hljs-title function_">print</span>(c + <span class="hljs-string">","</span> + recordCount);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> file = <span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>);
+  <span class="hljs-keyword">var</span> recordCount = <span class="hljs-title function_">countRecords</span>(file);
+  <span class="hljs-title function_">generateOutput</span>(file, recordCount);
+}
+</code></pre>
+<p>we can just inline this one-liner</p>
+<h4><a href="https://ericnormand.me/article/global-mutable-state#3-does-it-need-to-be-state" id="3-does-it-need-to-be-state"></a>3) Does it need to be state?</h4>
+<p>Can the algorithms be reworked so that their natural input and outputs
+(arguments and return values) are used instead of writing to a location?
+For instance, maybe you're using the variable to count stuff. Instead of
+the function adding to a variable, maybe it could just return the total
+count instead.</p>
+<p>Programs need state. But do we need to rely on the state to get the
+right answer? And does our state need to depend on the whole history of
+the program?</p>
+<p>Let's go through step by step in our code, removing state.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">countRecords</span>(<span class="hljs-params">file</span>) {
+  <span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    x++;
+  }
+  <span class="hljs-keyword">return</span> x;
+}
+</code></pre>
+<p>here's our state</p>
+<p>it changes each time through the loop</p>
+<p>The variable <code>x</code> is state. Its value depends
+on how many times the loop
+body has executed. Usually, this kind of counting loop is unnecessary
+because the standard library can already count a collection.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">countRecords</span>(<span class="hljs-params">file</span>) {
+  <span class="hljs-keyword">return</span> file.<span class="hljs-title function_">lines</span>().<span class="hljs-title function_">length</span>();
+}
+</code></pre>
+<p>we prefer not having to deal with the state</p>
+<p>Wow! There's no state, now. And in fact, it's so short we can just
+inline it. It's called once in <code>processFile</code>. Let's inline it there.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> file = <span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>);
+  <span class="hljs-keyword">var</span> recordCount = file.<span class="hljs-title function_">lines</span>().<span class="hljs-title function_">length</span>();
+  <span class="hljs-title function_">generateOutput</span>(file, recordCount);
+}
+</code></pre>
+<p>inline the one-liner (optional)</p>
+<p>That's better. But we still have state. It's not terribly much, but
+let's continue with the exercise. Notice how we rely on the state of
+<code>recordCount</code> to pass to <code>generateOutput</code>. What's to guarantee that the
+count we provide isn't different from the count of <code>file</code>? One possible
+direction to go is to move the <code>recordCount</code> calculation into
+<code>generateOutput</code>. Why should <code>generateOutput</code> trust someone else when it
+could just calculate it itself?</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">generateOutput</span>(<span class="hljs-params">file</span>) {
+  <span class="hljs-keyword">var</span> recordCount = file.<span class="hljs-title function_">lines</span>().<span class="hljs-title function_">length</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c <span class="hljs-keyword">in</span> file.<span class="hljs-title function_">lines</span>()) {
+    <span class="hljs-title function_">print</span>(c + <span class="hljs-string">","</span> + recordCount);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> file = <span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>);
+  <span class="hljs-title function_">generateOutput</span>(file);
+}
+</code></pre>
+<p>eliminate an argument that needed to be kept in sync</p>
+<p>calculate it ourselves</p>
+<p>now our process is two steps</p>
+<p>And now we don't need that little local variable called <code>file</code>.</p>
+<pre><code class="language-javascript hljs" data-highlighted="yes"><span class="hljs-keyword">function</span> <span class="hljs-title function_">processFile</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-title function_">generateOutput</span>(<span class="hljs-title function_">openFile</span>(<span class="hljs-string">"input.txt"</span>));
+}
+</code></pre>
+<p>it can be written as one step</p>
+<h3><a href="https://ericnormand.me/article/global-mutable-state#conclusion" id="conclusion"></a>Conclusion</h3>
+<p>I've taken this simple example to an extreme. And, yes, this was a
+trivial example. But my experience with real world code tells me that
+<strong>you see the same kind of improvements when you remove global mutable
+state in real systems</strong>. The code becomes easier to reason about
+(because you're reasoning locally). It becomes easier to refactor. It
+becomes easier to eliminate code.</p>
+<p>Reducing global mutable state is one of the hallmarks of functional
+programming. But it's also just <em>good</em> coding. You can (and should) do
+this kind of refactoring in any programming language or paradigm. If
+you're interested in going deeper with functional programming, I
+recommend <a href="https://ericnormand.podia.com/">PurelyFunctional.tv Online
+Mentoring</a>. It's bite-size lessons
+teaching the fundamentals of professional Clojure. Check it out.</p>
+<div class="not-prose"><div class="border border-gray-200 overflow-hidden rounded-lg px-0 drop-shadow-md bg-white top-optin-for-hiding flex flex-col lg:flex-row justify-between" style="min-width:398px"><div class="flex flex-row flex-shrink-0 mx-auto lg:mx-0"><img alt="Grokking Simplicity (book cover)" class="lg:m-0" src="./Global Mutable State_files/Grokking-Simplicity.jpg" style="margin-top:0;margin-bottom:0" width="160"><div class="flex flex-col text-left text-sm justify-around ml-2 mr-4"><div>👍 Into to FP</div><div>👍 Beginner-friendly</div><div>👍 Quick read</div><div>👍 Exercises</div><div>👍 Fun!</div></div></div><div class="flex-1 p-2 pt-4 text-center lg:text-left flex-shrink max-w-md"><div><span class="italic text-2xl font-bold">Grokking Simplicity</span></div><div class="text-sm">by Eric Normand</div><div class="flex flex-col lg:flex-row mt-4 max-w-sm"><div class="mr-2 flex-shrink-0"><img alt="Jo Van Eyck" class="rounded-full mx-auto" src="./Global Mutable State_files/jo-van-eyck.jpg" style="margin-top:0;margin-bottom:0" width="30"></div><div class="text-xs"><span class="font-bold">Jo Van Eyck</span><br><span class="italic">“Grokking Simplicity is by far the gentlest introduction to FP I’ve encountered and I’ve been recommending it to people that want an on-ramp to FP ever since.”</span></div></div><div class="rounded-md shadow mt-4 block mx-auto w-60"><a class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-2 md:text-lg md:px-4 no-underline" href="https://lispcast.com/gs">Buy on Amazon</a></div></div></div></div></div></article></div></div><footer aria-labelledby="footerHeading" class="bg-indigo-800 mt-16 w-full"><h2 class="sr-only" id="footerHeading">Footer</h2><div class="py-8 px-4 sm:px-6 lg:px-8 lg:max-w-7xl mx-auto"><div class="max-w-prose lg:max-w-full mx-auto"><div class="flex justify-between flex-wrap"><a class="text-indigo-200 navigation" href="https://ericnormand.me/newsletter">Newsletter</a><a class="text-indigo-200 navigation" href="https://ericnormand.me/clojure">Clojure Guides</a><a class="text-indigo-200 navigation" href="https://ericnormand.me/podcast">Podcast</a><a class="text-indigo-200 navigation" href="https://ericnormand.me/essays">Essays</a><a class="text-indigo-200 navigation" href="https://ericnormand.me/speaking">Speaking</a><a class="text-indigo-200 navigation" href="https://ericnormand.me/about">About</a></div><div class="mx-auto w-full mt-8 rounded-lg border overflow-hidden"><iframe class="w-full" frameborder="0" height="320" scrolling="no" src="./Global Mutable State_files/embed.html"></iframe></div><div class="mt-8 border-t border-indigo-500 pt-8"><p class="mt-8 text-base text-indigo-200 md:mt-0 md:order-1 text-center"><a class="navigation" href="https://ericnormand.me/privacy">Privacy Policy</a> · <a class="navigation" href="https://ericnormand.me/terms">Terms of Service</a><br>© 2025 Eric Normand. All rights reserved.</p></div></div></div></footer></body></html>
