@@ -1,0 +1,11 @@
+id,brand,model,year,status
+1,Toyota,Corolla,2021,disponible
+2,Honda,Civic,2022,disponible
+3,Ford,Mustang,2020,disponible
+4,Chevrolet,Onix,2023,disponible
+5,Nissan,Sentra,2021,disponible
+6,Hyundai,Elantra,2022,disponible
+7,Kia,Rio,2019,deshabilitado
+8,Volkswagen,Jetta,2021,disponible
+9,BMW,Series 3,2023,disponible
+10,Mazda,Mazda 3,2022,disponible
