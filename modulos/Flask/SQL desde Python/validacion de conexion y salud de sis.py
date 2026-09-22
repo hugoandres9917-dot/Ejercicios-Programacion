@@ -1,4 +1,5 @@
-## validacion de conexion y salud de sistema
+##no hay cambios solo para efecto de entrega
+## validacion de conexion y salud de sistema 
 
 import psycopg2
 
