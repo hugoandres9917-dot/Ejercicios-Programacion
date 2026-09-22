@@ -12,7 +12,7 @@ DB_CONFIG = {
     "port": "5432",
 }
 
-# Tablas requeridas (en español según los requerimientos de la actividad)
+# Tablas requeridas 
 REQUIRED_TABLES = ["users", "vehicles", "rentals"]
 
 
