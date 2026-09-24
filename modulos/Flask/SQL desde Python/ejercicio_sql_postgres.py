@@ -46,33 +46,55 @@ def create_user():
     finally:
         conn.close()
         
+        
 
 @app.route('/users', methods=['GET'])
 def list_users():
     conn = get_database_connection()
     repo = UserRepository(conn)
-    users = repo.get_all(request.args)
-    conn.close()
-    return jsonify(users)
+    try:
+        users = repo.get_all(request.args)
+        return jsonify(users), 200
+    except Exception as  e:
+        return jsonify({"Error": str(e)}), 400 
+    finally:   
+        conn.close()
 
 
 @app.route('/users/<int:id>/status', methods=['PATCH'])
 def change_user_status(id):
-    status = request.json.get('status')
     conn = get_database_connection()
     repo = UserRepository(conn)
-    user = repo.update_status(id, status)
-    conn.close()
-    return jsonify(user) if user else (jsonify({"error": "No encontrado"}), 404)
-
-
-@app.route('/users/<int:id>/deliquent', methods=['PATCH'])
+    try:
+        data = request.get_json() or {}
+        status = data.get('status')
+        user = repo.update_status(id, status)
+        if not user:
+            return jsonify({"error": "No encontrado"}), 404
+        conn.commit()
+        return jsonify(user), 200
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 400
+    finally:
+        conn.close()
+    
+@app.route('/users/<int:id>/delinquent', methods=['PATCH'])
 def flag_user_deliquent(id):
     conn = get_database_connection()
     repo = UserRepository(conn)
-    user = repo.update_status(id, 'deliquent')## moroso
-    conn.close()
-    return jsonify(user) if user else (jsonify({"error": "No encontrado"}), 404)
+    try:
+        # Se envía exactamente 'delinquent' que coincide con el ENUM status_users
+        user = repo.update_status(id, 'delinquent')
+        if not user:
+            return jsonify({"error": "No encontrado"}), 404
+        conn.commit()
+        return jsonify(user), 200
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 400
+    finally:
+        conn.close()
 
 
 ##########################################################################################
@@ -98,19 +120,33 @@ def create_vehicle():
 def list_vehicles():
     conn = get_database_connection()
     repo = VehicleRepository(conn)
-    vehicles = repo.get_all(request.args)
-    conn.close()
-    return jsonify(vehicles)  
-
+    try:
+        vehicles = repo.get_all(request.args)
+        return jsonify(vehicles), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    finally:
+        conn.close()
+        
+    
 @app.route('/vehicles/<int:id>/status', methods=['PATCH'])# solo actualizamos un atributo espeficico
 def change_vehicle_status(id):
-    status = request.json.get('status')#
     conn = get_database_connection()
     repo = VehicleRepository(conn)
-    vehicle = repo.update_status(id, status)
-    conn.close()
-    return jsonify(vehicle) if vehicle else (jsonify({"error": "No encontrado"}), 404)
-
+    try:
+        data = request.get_json() or {}
+        status = data.get('status')
+        vehicle = repo.update_status(id, status)
+        if not vehicle:
+            return jsonify({"error": "No encontrado"}), 404
+        conn.commit()
+        return jsonify(vehicle), 200
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 400
+    finally:
+        conn.close()
+        
 #################################################################################################
     ## alquileres rutas y metodos relacionados con rental
 ################################################################################################
@@ -137,9 +173,13 @@ def create_rental():
 def list_rentals():
     conn = get_database_connection()
     repo = RentalRepository(conn)
-    rentals = repo.get_all(request.args)
-    conn.close()
-    return jsonify(rentals)
+    try:
+        rentals = repo.get_all(request.args)
+        return jsonify(rentals), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    finally:
+        conn.close()
 
 
 @app.route('/rentals/<int:id>/complete', methods=['PATCH'])
@@ -159,13 +199,23 @@ def complete_rental(id):
 
 @app.route('/rentals/<int:id>/status', methods=['PATCH'])
 def change_rental_status(id):
-    status = request.json.get('status') 
     conn = get_database_connection()
     repo = RentalRepository(conn)
-    rental = repo.update_status(id, status)
-    conn.close()
-    return jsonify(rental) if rental else (jsonify({"error": "No encontrado"}), 404)
-
+    try:
+        data = request.get_json() or {}
+        status = data.get('status') 
+        rental = repo.update_status(id, status)
+        if not rental:
+            return jsonify({"error": "No encontrado"}), 404
+        conn.commit()
+        return jsonify(rental), 200
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)}), 400
+    finally:
+        conn.close()
+        
+        
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
 
