@@ -47,7 +47,7 @@ def check_system_health():
             """
             SELECT COUNT(*)
             FROM vehicles
-            WHERE status = 'disponible';
+            WHERE status = 'available';
             """
         )
         available_cars = cursor.fetchone()[0]
