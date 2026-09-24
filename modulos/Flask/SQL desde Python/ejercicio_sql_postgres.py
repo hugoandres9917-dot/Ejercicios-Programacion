@@ -190,7 +190,8 @@ def complete_rental(id):
         rental = repo.complete_rental(id)
         if not rental:
             return jsonify({"error": "alquiler no encontrado"}), 404
-        return jsonify(rental)
+        conn.commit()
+        return jsonify(rental), 200
     except Exception as e:
         conn.rollback()
         return jsonify({"error": str(e)}), 400
