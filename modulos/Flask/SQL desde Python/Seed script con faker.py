@@ -95,7 +95,7 @@ def seed_database():
 
         insert_rentals_query = """
             INSERT INTO rentals (user_id, auto_id, rental_date, status)
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s)
         """
         cursor.executemany(insert_rentals_query, rentals_data)
 
