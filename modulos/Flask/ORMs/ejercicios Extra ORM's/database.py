@@ -12,8 +12,7 @@ class Base(DeclarativeBase):
     pass
 
 def init_db():
-    Base.metadata.drop_all(engine) #ELIMINA TODAS LAS TABLAS SI EXISTEN
-    Base.metadata.create_all(engine)#VALIDA EXISTANCIA Y CREA SI NO EXISTEN
-    print("Base de datos inicializada: tablas varificadas/creadas exitosamente")
+    Base.metadata.create_all(engine)#Valida si las tablas existen y las crea si no existen
+    print("Base de datos inicializada: tablas verificadas/creadas exitosamente")
     
     

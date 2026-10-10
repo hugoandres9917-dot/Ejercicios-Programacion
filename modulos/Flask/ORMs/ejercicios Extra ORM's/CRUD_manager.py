@@ -42,7 +42,7 @@ class UserManager:
         with SessionLocal() as session:
             return list(session.scalars(select(User)).all())
     
-    # Ejercicio 1.2: Usuarios con más de 1 auto
+    # Ejercicio extra 1.2: Usuarios con más de 1 auto
     @staticmethod
     def get_users_with_multiple_vehicles() -> List[User]:
         with SessionLocal() as session:
@@ -54,7 +54,8 @@ class UserManager:
             )
             return list(session.scalars(stmt).all())
     
-    # Ejercicio 2: Imprimir autos y direcciones usando usuario.autos y usuario.direcciones
+    # Ejercicio extra 2: punto 2
+    # Imprimir autos y direcciones usando usuario.autos y usuario.direcciones
     @staticmethod
     def get_user_with_vehicles_and_addresses(user_id: int) -> None:
         with SessionLocal() as session:
@@ -138,7 +139,7 @@ class VehicleManager:
         with SessionLocal() as session:
             return list(session.scalars(select(Vehicle)).all())
         
-    # Ejercicio 1.1: Automóviles sin usuario asignado
+    # Ejercicio extra 1.1: Automóviles sin usuario asignado
     @staticmethod
     def get_vehicles_without_user() -> List[Vehicle]:
         with SessionLocal() as session:
@@ -150,6 +151,10 @@ class AddressManager:
     @staticmethod
     def create_address(street: str, city: str, user_id: int) -> Address:  
         with SessionLocal() as session:
+            user = session.get(User, user_id)
+            if not user:
+                print(f"Error: No se puede crear la dirección porque el usuario con ID {user_id} no existe.")
+                return None
             address = Address(street=street, city=city, user_id=user_id)
             session.add(address)
             session.commit()
@@ -182,7 +187,7 @@ class AddressManager:
         with SessionLocal() as session:
             return list(session.scalars(select(Address)).all())
 
-    # Ejercicio 1.3: Direcciones por coincidencias en el nombre de calle
+    # Ejercicion extra  1.3: Direcciones por coincidencias en el nombre de calle
     @staticmethod
     def get_addresses_by_street(street_name: str) -> List[Address]:
         with SessionLocal() as session:

@@ -14,7 +14,8 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     
-    ##relaciones ORM
+    ##relaciones ORM.
+    #ejercio extra 2 punto 1 modifar modelo para acceder a direcciones y autos desde el usuario
     direcciones: Mapped[List["Address"]] = relationship("Address", back_populates="user", cascade="all, delete-orphan")
     autos: Mapped[List["Vehicle"]] = relationship("Vehicle", back_populates="user")
     
@@ -30,6 +31,8 @@ class Address(Base):
     city: Mapped[str] = mapped_column(String(100), nullable=False)
 # FK OBLIGATORIA: las direcciones deben tener un usuario asociado
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+# cambio de nombre de la relación para que sea más intuitivo
+#ejercicio extra 2 punto 1 modifar modelo para acceder a direcciones y autos desde el usuario
     
     user: Mapped["User"] = relationship("User", back_populates="direcciones")
     
@@ -44,7 +47,8 @@ class Vehicle(Base):
     model: Mapped[str] = mapped_column(String(50), nullable=False)
     # FK OPCIONAL: los automóviles pueden no tener usuario asociado
     user_id: Mapped[Optional[int]] =mapped_column(ForeignKey("users.id"), nullable=True)
-    
+    # cambio de nombre de la relación para que sea más intuitivo
+    #ejercicio extra 2 punto 1 modifar modelo para acceder a direcciones y autos desde el usuario
     user: Mapped["User"] = relationship("User", back_populates="autos")
     
     def __repr__(self):
