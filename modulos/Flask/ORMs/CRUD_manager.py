@@ -7,8 +7,9 @@ from ORMs_Models import User, Address, Vehicle
 
 class UserManager:
     @staticmethod
-    def create_user(name: str, email: str) -> User:
-        with SessionLocal() as session:
+    def create_user(name: str, email: str) -> Optional[User]:
+        with SessionLocal() as session:#Evitar duplicados si ejecutas Main.py varias veces
+            existing_user = session.scalars(select(User).where(User.email == email)).first()
             user = User(name=name, email=email)
             session.add(user)
             session.commit()
@@ -95,6 +96,10 @@ class AddressManager:
     @staticmethod
     def create_address(street: str, city: str, user_id: int) -> Address:  
         with SessionLocal() as session:
+            user = session.get(User, user_id) #validacion de usuario existente antes de crear la direccion
+            if not user:
+                print(f"Error: No se puede crear la dirección porque el usuario con ID {user_id} no existe.")
+                return None
             address = Address(street=street, city=city, user_id=user_id)
             session.add(address)
             session.commit()

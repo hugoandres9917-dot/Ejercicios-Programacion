@@ -11,9 +11,8 @@ SessionLocal = sessionmaker(bind=engine)
 class Base(DeclarativeBase):
     pass
 
-def init_db():
-    Base.metadata.drop_all(engine) #ELIMINA TODAS LAS TABLAS SI EXISTEN
-    Base.metadata.create_all(engine)#VALIDA EXISTANCIA Y CREA SI NO EXISTEN
-    print("Base de datos inicializada: tablas varificadas/creadas exitosamente")
+def init_db():#mantiene la persitencia de la base de datos, crea las tablas si no existen
+    Base.metadata.create_all(engine)#VALIDA EXISTANCIA DE TABLAS, SI NO EXISTEN LAS CREA
+    print("Base de datos inicializada: tablas verificadas/creadas exitosamente")
     
     
