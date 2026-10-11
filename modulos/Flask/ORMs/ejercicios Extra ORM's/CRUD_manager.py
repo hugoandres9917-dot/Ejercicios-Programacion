@@ -46,13 +46,10 @@ class UserManager:
     @staticmethod
     def get_users_with_multiple_vehicles() -> List[User]:
         with SessionLocal() as session:
-            stmt = (
-                select(User)
-                .join(User.autos)  # Apunta al atributo User.autos
-                .group_by(User.id)
-                .having(func.count(Vehicle.id) > 1)
-            )
-            return list(session.scalars(stmt).all())
+            stmt = select(User).options(selectinload(User.autos))
+            users = session.scalars(stmt).all()
+            # Filtramos en Python o directamente en SQL aquellos con len(autos) > 1
+            return [u for u in users if len(u.autos) > 1]
     
     # Ejercicio extra 2: punto 2
     # Imprimir autos y direcciones usando usuario.autos y usuario.direcciones
@@ -192,4 +189,11 @@ class AddressManager:
     def get_addresses_by_street(street_name: str) -> List[Address]:
         with SessionLocal() as session:
             stmt = select(Address).where(Address.street.ilike(f"%{street_name}%"))
+            return list(session.scalars(stmt).all())
+        
+    @staticmethod
+    def get_addresses_by_street_substring(substring: str) -> List[Address]:
+        with SessionLocal() as session:
+            # Filtra las direcciones cuyo campo street contenga el substring indicado
+            stmt = select(Address).where(Address.street.ilike(f"%{substring}%"))
             return list(session.scalars(stmt).all())

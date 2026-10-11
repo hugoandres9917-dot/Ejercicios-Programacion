@@ -1,77 +1,89 @@
 # Main
-
-#ejercicios de ORMs
-
-#setup de SQLAIchemy, adjunte un screenshot de la validacion de la version de la bibilioteca
-
-##print(f"Versión de SQLAlchemy: {sqlalchemy.__version__}")
-
-#####Versión de SQLAlchemy: 2.1.1##
-
-##2. Plantee una base de datos con tablas para usuarios, direcciones y automoviles.
-
+#ejercicio extra de ORM,
+# Filtros avanzados con SQLAlchemy,
+# Relaciones bidireccionales y acceso simplificado
+# Seed inicial con datos falsos usando Faker
 
 from database import init_db
 from CRUD_manager import UserManager, VehicleManager, AddressManager
+from faker import Faker
 
-# PRUEBA DE EJECUCION         
+def populate_database():
+    fake = Faker()
+    print("\n--- Poblando la base de datos con datos de prueba ---")
+
+    # Crear usuarios
+    users = []
+    for _ in range(20):
+        name = fake.name()
+        email = fake.unique.email() # Usamos unique para evitar duplicados de correo
+        user = UserManager.create_user(name=name, email=email)
+        users.append(user)
+
+        # Crear direcciones para cada usuario (asegurando que algunas lleven la palabra "Calle")
+        for _ in range(fake.random_int(min=1, max=3)):
+            calle = f"Calle {fake.street_name()}" if fake.boolean() else fake.street_address()
+            AddressManager.create_address(calle, fake.city(), user.id)
             
+        # Crear vehiculos para cada usuario (0 a 3)
+        brands = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan']
+        for _ in range(fake.random_int(min=0, max=3)):
+            VehicleManager.create_vehicle(fake.random_element(brands), fake.word(), user.id)
+            
+    # Crear vehiculos sin dueño (huerfanos) fuera del ciclo de usuarios
+    brands = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan']
+    for _ in range(5):  
+        VehicleManager.create_vehicle(fake.random_element(elements=brands), fake.word(), user_id=None)
+            
+    print("Base de datos poblada con exito")
+        
 if __name__ == "__main__":
-    #  Crear tablas si no existen
+    # 1. Inicializar la base de datos (verifica y crea tablas si no existen)
     init_db()
-
-    print("\n--- 1. Usuarios")
-    u1 = UserManager.create_user("Hugo Alvarado", "hugo@example.com")
-    u2 = UserManager.create_user("Maria Lopez", "maria@example.com")
-    print(f"Usuarios creados: {u1}, {u2}")
     
-    UserManager.update_user(u1.id, name="Hugo A. Alvarado")
-    UserManager.delete_user(u2.id)
+    # Si la base de datos está vacia, la poblamos con Faker
+    if not UserManager.get_all_users():
+        populate_database()
+    else:
+        print("\n--- La base de datos ya contiene registros. Usando datos existentes... ---")
 
-    print("\n--- 2. AUTOMOVILES ---")
-    v1 = VehicleManager.create_vehicle("Toyota", "Corolla")
-    v2 = VehicleManager.create_vehicle("Honda", "Civic")
-    print(f"Automoviles creados: {v1}, {v2}")
+    print("\n--- EJERCICIOS EXTRA DE ORM ---")
+
+    # 2. Probar la relación bidireccional y acceso simplificado (Ejercicio 2)
+    all_users = UserManager.get_all_users()
+    if all_users:
+        user_test = all_users[0]
+        print(f"\n--- PRUEBA RELACIONES PARA USUARIO ID: {user_test.id} ({user_test.name}) ---")
+        UserManager.get_user_with_vehicles_and_addresses(user_id=user_test.id)
+    else:
+        print("No hay usuarios registrados en la base de datos.")
+
+    # 3. Probar usuarios con multiples vehiculos (Ejercicio 1)
+    print("\n--- USUARIOS CON MÁS DE UN VEHÍCULO ---")
     
-    VehicleManager.update_vehicle(v1.id, model="Corolla Hybrid")
-    VehicleManager.delete_vehicle(v2.id)
+    multiple_users = UserManager.get_users_with_multiple_vehicles()
+    if multiple_users:
+        for u in multiple_users:
+            print(f"- {u.name} (ID: {u.id}) - Total autos: {len(u.autos)}")
+    else:
+        print("No se encontraron usuarios con multiples vehiculos.")
 
-    print("\n--- 3. DIRECCIONES ---")
-    addr1 = AddressManager.create_address("Av. Central 123", "San José", u1.id)
-    addr2 = AddressManager.create_address("Calle 5", "Heredia", u1.id)
-    print(f"Direcciones creadas: {addr1}, {addr2}")
+    # 4. Probar vehiculos sin dueño (Ejercicio 1)
+    print("\n--- VEHICULOS SIN USUARIO ---")
     
-    AddressManager.update_address(addr1.id, street="Av. Central 456")
-    AddressManager.delete_address(addr2.id)
-
-    print("\n--- 4. ASOCIAR VEHICULO ---")
-    v1_associated = VehicleManager.assign_vehicle_to_user(v1.id, u1.id)
-    print(f"Vehiculo asociado: {v1_associated}")
-
-    print("\n--- 5. CONSULTA USUARIOS ---")
-    print(UserManager.get_all_users())
+    orphan_cars = VehicleManager.get_vehicles_without_user()
+    if orphan_cars:
+        for v in orphan_cars:
+            print(f"- {v.brand} {v.model} (ID: {v.id})")
+    else:
+        print("No hay vehiculos huerfanos registrados.")
+        
+    # 5. Probar direcciones que contienen la palabra "Calle" (Ejercicio 1)
+    print("\n--- DIRECCIONES QUE CONTIENEN 'Calle' ---")
     
-    print("\n--- 6. CONSULTA AUTOMOVILES ---")
-    print(VehicleManager.get_all_vehicles())
-
-    print("\n--- 7. CONSULTA DIRECCIONES ---")
-    print(AddressManager.get_all_addresses())
-    
-    
-##EJERCICIO EXTRA: POBLAR BASE DE DATOS CON FAKER
-
-# 1. Probar la consulta del Ejercicio 2 (imprimir autos y direcciones de un usuario)
-print("--- PRUEBA EJERCICIO 2 ---")
-UserManager.get_user_with_vehicles_and_addresses(user_id=1)
-
-# 2. Probar usuarios con múltiples vehículos
-print("\n--- USUARIOS CON MÁS DE UN VEHÍCULO ---")
-usuarios_multiples = UserManager.get_users_with_multiple_vehicles()
-for u in usuarios_multiples:
-    print(f"- {u.name} (ID: {u.id})")
-
-# 3. Probar vehículos sin dueño
-print("\n--- VEHÍCULOS SIN USUARIO ---")
-vehiculos_huérfanos = VehicleManager.get_vehicles_without_user()
-for v in vehiculos_huérfanos:
-    print(f"- {v.brand} {v.model} (ID: {v.id})")
+    calle_addresses = AddressManager.get_addresses_by_street_substring("Calle")
+    if calle_addresses:
+        for addr in calle_addresses:
+            print(f"- {addr.street}, {addr.city} (User ID: {addr.user_id})")
+    else:
+        print("No se encontraron direcciones con el criterio 'Calle'.")
