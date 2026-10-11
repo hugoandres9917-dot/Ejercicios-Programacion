@@ -15,9 +15,7 @@ from database import init_db
 from CRUD_manager import UserManager, VehicleManager, AddressManager
 
 if __name__ == "__main__":
-    # 1. Valida si las tablas existen y las crea solo si no existen (sin borrar datos previos)
-    init_db()
-
+    init_db()# 1. Valida si las tablas existen y las crea solo si no existen (sin borrar datos previos)
     print("\n--- 1. Usuarios ---")
     try:
         u1 = UserManager.create_user("Hugo Alvarado", "hugo@example.com")
@@ -33,14 +31,12 @@ if __name__ == "__main__":
     except ValueError:
         u2 = UserManager.get_all_users()[1] if len(UserManager.get_all_users()) > 1 else u1
         print(f"Usuario recuperado (ya existia): {u2}")
-    
     UserManager.update_user(u1.id, name="Hugo A. Alvarado")
-
+    
     print("\n--- 2. AUTOMOVILES ---")
     v1 = VehicleManager.create_vehicle("Toyota", "Corolla")
     v2 = VehicleManager.create_vehicle("Honda", "Civic")
     print(f"Automoviles creados: {v1}, {v2}")
-    
     VehicleManager.update_vehicle(v1.id, model="Corolla Hybrid")
     VehicleManager.delete_vehicle(v2.id)
 
@@ -49,7 +45,7 @@ if __name__ == "__main__":
     if addr1:
         print(f"Dirección creada: {addr1}")
         AddressManager.update_address(addr1.id, street="Av. Central 456")
-
+        
     print("\n--- 4. ASOCIAR VEHICULO ---")
     v1_associated = VehicleManager.assign_vehicle_to_user(v1.id, u1.id)
     print(f"Vehiculo asociado: {v1_associated}")
