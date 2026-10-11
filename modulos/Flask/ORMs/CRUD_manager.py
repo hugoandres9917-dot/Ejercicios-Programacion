@@ -4,17 +4,21 @@ from typing import List, Optional
 from sqlalchemy import  select
 from database import SessionLocal
 from ORMs_Models import User, Address, Vehicle
+from sqlalchemy.exc import IntegrityError
 
 class UserManager:
     @staticmethod
     def create_user(name: str, email: str) -> Optional[User]:
-        with SessionLocal() as session:#Evitar duplicados si ejecutas Main.py varias veces
-            existing_user = session.scalars(select(User).where(User.email == email)).first()
-            user = User(name=name, email=email)
-            session.add(user)
-            session.commit()
-            session.refresh(user)
-            return user
+        with SessionLocal() as session:
+            try:     
+                user = User(name=name, email=email)
+                session.add(user)
+                session.commit()
+                session.refresh(user)
+                return user
+            except IntegrityError:
+                session.rollback()
+                raise ValueError(f"El usuario con email '{email}' ya existe.")
     
     @staticmethod
     def update_user(user_id: int, name: Optional[str]= None, email: Optional[str] = None) -> Optional[User]:
