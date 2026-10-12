@@ -1,4 +1,4 @@
-#Manager Logica CRUD
+#Manager Logica CRUD.
 
 from typing import List, Optional
 from sqlalchemy import func, select

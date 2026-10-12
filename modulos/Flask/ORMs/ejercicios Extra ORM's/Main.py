@@ -68,7 +68,7 @@ if __name__ == "__main__":
     else:
         print("No se encontraron usuarios con multiples vehiculos.")
 
-    # 4. Probar vehiculos sin dueño (Ejercicio 1)
+    # 4. Probar vehiculos sin dueño (Ejercicio 1).
     print("\n--- VEHICULOS SIN USUARIO ---")
     
     orphan_cars = VehicleManager.get_vehicles_without_user()

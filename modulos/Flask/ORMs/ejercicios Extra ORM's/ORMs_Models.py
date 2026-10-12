@@ -6,7 +6,7 @@ from sqlalchemy import  ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import Base
 
-# Modelos
+# Modelos.
 class User(Base):
     __tablename__ = "users"
     

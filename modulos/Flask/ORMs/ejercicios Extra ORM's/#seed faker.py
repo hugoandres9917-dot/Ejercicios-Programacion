@@ -12,7 +12,7 @@ def run_seed():
     print("poblando base de datos mediante faker...")
     
     
-    #crear 20 usuarios
+    #crear 20 usuarios.
     
     users =[]
     for _ in range(20):
