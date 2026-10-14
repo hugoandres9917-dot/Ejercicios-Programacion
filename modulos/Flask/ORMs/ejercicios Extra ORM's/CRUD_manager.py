@@ -46,10 +46,14 @@ class UserManager:
     @staticmethod
     def get_users_with_multiple_vehicles() -> List[User]:
         with SessionLocal() as session:
-            stmt = select(User).options(selectinload(User.autos))
-            users = session.scalars(stmt).all()
-            # Filtramos en Python o directamente en SQL aquellos con len(autos) > 1
-            return [u for u in users if len(u.autos) > 1]
+            stmt = (
+                select(User)
+                .join(User.autos)
+                .group_by(User.id)
+                .having(func.count(Vehicle.id) > 1)
+                .options(selectinload(User.autos))
+            )
+            return list(session.scalars(stmt).all())
     
     # Ejercicio extra 2: punto 2
     # Imprimir autos y direcciones usando usuario.autos y usuario.direcciones
@@ -186,14 +190,10 @@ class AddressManager:
 
     # Ejercicion extra  1.3: Direcciones por coincidencias en el nombre de calle
     @staticmethod
-    def get_addresses_by_street(street_name: str) -> List[Address]:
+    def get_addresses_by_street_substring(street_name: str) -> List[Address]:
+        #buscamos direcciones que contengan la palabra "Calle" en el nombre de la calle
         with SessionLocal() as session:
             stmt = select(Address).where(Address.street.ilike(f"%{street_name}%"))
             return list(session.scalars(stmt).all())
+        #mantenemos nombre get_addresses_by_street_substring para consistencia con el enunciado del ejercicio
         
-    @staticmethod
-    def get_addresses_by_street_substring(substring: str) -> List[Address]:
-        with SessionLocal() as session:
-            # Filtra las direcciones cuyo campo street contenga el substring indicado
-            stmt = select(Address).where(Address.street.ilike(f"%{substring}%"))
-            return list(session.scalars(stmt).all())
