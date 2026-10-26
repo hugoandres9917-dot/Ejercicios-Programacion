@@ -1,6 +1,6 @@
 #Keys
 
-from flask_extended import create_acces_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 #dentro de tu ruta/login/ register
 

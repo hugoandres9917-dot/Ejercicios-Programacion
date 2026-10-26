@@ -1,6 +1,7 @@
 #generate_keys.py
 
-#este script se ejecuta una sola vez para generar las llaves privadas y publicas que se utilizaran para firmar y verificar los tokens JWT
+#este script se ejecuta una sola vez para generar las llaves privadas
+# y publicas que se utilizaran para firmar y verificar los tokens JWT
 
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
