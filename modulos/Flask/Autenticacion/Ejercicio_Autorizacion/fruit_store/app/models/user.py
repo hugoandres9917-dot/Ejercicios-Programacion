@@ -24,6 +24,14 @@ class User(db.Model):
     # Método para verificar si la contraseña coincide al hacer Login
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "role": self.role
+        }
 
     def __repr__(self)-> str:
         return f"<User(id={self.id}, username='{self.username}', role='{self.role}')>"

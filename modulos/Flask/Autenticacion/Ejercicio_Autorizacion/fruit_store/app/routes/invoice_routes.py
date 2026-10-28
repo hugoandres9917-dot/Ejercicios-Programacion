@@ -6,6 +6,7 @@ from app import db
 from app.models.product import Product
 from app.models.invoice import Invoice
 from app.models.invoice_detail import  InvoiceDetail
+from sqlalchemy.orm import selectinload
 
 
 invoice_bp = Blueprint("invoices", __name__)
@@ -71,6 +72,8 @@ def get_user_invoices():
     current_user_id = get_jwt_identity()
     
 # Buscamos las facturas de este usuario
-    invoices = Invoice.query.filter_by(user_id=current_user_id).all()
+    invoices = Invoice.query.options(
+    selectinload(Invoice.invoice_details)
+).filter_by(user_id=int(current_user_id)).all()
     
     return jsonify([invoice.serialize() for invoice in invoices]), 200

@@ -25,4 +25,12 @@ def create_app():
     app.register_blueprint(product_bp, url_prefix="/api")
     app.register_blueprint(invoice_bp, url_prefix="/api")
     
+    with app.app_context():
+        from app.models.user import User
+        from app.models.product import Product
+        from app.models.invoice import Invoice          # <--- Asegúrate de importar tu modelo de factura
+        from app.models.invoice_detail import InvoiceDetail
+        
+        db.create_all()
+    
     return app

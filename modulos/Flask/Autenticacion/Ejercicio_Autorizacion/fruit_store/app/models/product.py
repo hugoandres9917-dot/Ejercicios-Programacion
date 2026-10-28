@@ -18,5 +18,14 @@ class Product(db.Model):
     
     invoice_details: Mapped[List["InvoiceDetail"]] = relationship(back_populates="product")
     
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "entry_date": self.entry_date.strftime("%Y-%m-%d") if self.entry_date else None,
+            "stock": self.stock
+        }
+    
     def __repr__(self)-> str:
         return f"<Product(id={self.id}, name='{self.name}', price={self.price}, stock='{self.stock}')>"

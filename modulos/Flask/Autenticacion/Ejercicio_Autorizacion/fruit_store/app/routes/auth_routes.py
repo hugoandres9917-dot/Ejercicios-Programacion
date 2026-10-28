@@ -1,6 +1,6 @@
 #login_password
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from app import db  
 from app.models.user import User
 
@@ -42,7 +42,6 @@ def login():
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
-    
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
@@ -82,3 +81,10 @@ def register():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+@auth_bp.route("/me", methods=["GET"])
+@jwt_required()
+def get_current_user():
+    current_user_id = get_jwt_identity()
+    user = User.query.get_or_404(current_user_id)
+    return jsonify(user.serialize()), 200

@@ -11,6 +11,7 @@ product_bp = Blueprint("products", __name__)
 
 # 1. Ruta publica todos los productos de la fruteria
 @product_bp.route("/products", methods=["GET"])
+@jwt_required()
 def get_products():
     try:
         products = Product.query.all()
@@ -73,6 +74,7 @@ def create_product():
     
 # 3. Ruta PÚBLICA: Ver un solo producto por ID
 @product_bp.route("/products/<int:id>", methods=["GET"])
+@jwt_required()
 def get_product_by_id(id):
     product = Product.query.get_or_404(id)
     return jsonify(product.serialize()), 200
