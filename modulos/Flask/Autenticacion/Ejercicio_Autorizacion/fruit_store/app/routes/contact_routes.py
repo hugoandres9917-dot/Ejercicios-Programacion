@@ -6,12 +6,13 @@ from app import db
 from app.models.contact import Contact
 
 contact_bp = Blueprint("contacts", __name__)
-@jwt_required
+
+@contact_bp.route("/contacts", methods=["GET"])
+@jwt_required()
 def get_contacts():
     current_user_id = int(get_jwt_identity())
     claims = get_jwt()
     role = claims.get("role")
-    
 #ojo si es admin, ve todos los contactos;
 # si es usuario normal, solo sus contactos
     if role == "admin":
@@ -53,16 +54,15 @@ def create_contact():
 
 
 #ACTUALIZAR CONTACTO
-@contact_bp.route("/contacts/<int:id>", methods=["PUT"])
+
+@contact_bp.route("/contacts/<int:contact_id>", methods=["PUT"])
 @jwt_required()
-def update_contact(id):
+def update_contact(contact_id):
     current_user_id = int(get_jwt_identity())
-    claims = get_jwt()
-    role = claims.get("role")
+    contact = Contact.query.get_or_404(contact_id)
     
-    contact = Contact.query.get_or_404(id)
     # Validar permisos: Usuario normal solo edita lo suyo. Admin puede editar 
-    if role != "admin" and contact.user_id != current_user_id:
+    if contact.user_id != current_user_id:
         return jsonify({"error": "No tienes permisos para modificar este contacto"}), 403
     
     data = request.get_json()
@@ -73,9 +73,7 @@ def update_contact(id):
     db.session.commit()
     
     return jsonify({
-        "message": "Contacto actualizado con Exito",
-        "contact": contact.serialize()
-    }), 200
+        "message": "Contacto actualizado con Exito","contact": contact.serialize()}), 200
     
 #Eliminar contacto (DELETE)
 @contact_bp.route("/contacts/<int:id>", methods=["DELETE"])
@@ -94,3 +92,25 @@ def delete_contact(id):
     db.session.commit()
 
     return jsonify({"message": "Contacto eliminado con Exito"}), 200
+
+##agregabdo ENDPOINT FALTANTE y solicitado consultar un solo contacto por ID (GET /contacts/<id>)
+
+@contact_bp.route("/contacts/<int:contact_id>", methods=["GET"])
+@jwt_required()
+def get_contacts_by_id(contact_id):
+    claims = get_jwt()
+    role = claims.get("role")
+    current_user_id = int(get_jwt_identity())
+    
+    #si es admiin, ve todos los contactos 
+    #si es user solo los suyos
+    contact = Contact.query.get_or_404(contact_id)
+
+
+    if role != "admin" and contact.user_id != current_user_id:
+        return (
+            jsonify({"error": "No tienes permiso para ver este contacto"}), 403,
+    )
+
+    return jsonify(contact.serialize()), 200
+

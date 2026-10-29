@@ -1,5 +1,6 @@
 # login_password.py
 from app import db
+from app.decorators.decorators import admin_required
 from app.models.loginhistory import (LoginHistory,)
 from app.models.user import User
 from flask import Blueprint, jsonify, request
@@ -27,9 +28,12 @@ def login():
 
     #Verificamos si el usuario existe y si la contraseña es correcta
     if not user or not user.check_password(password):
-    # Si al menos el usuario existe, guardamos el intento fallido asociado a su ID
-        if user:
-            failed_record = LoginHistory(user_id=user.id, ip_address=client_ip, success=False)
+        failed_record = LoginHistory(
+            user_id=user.id if user else None,  # Maneja si user es None
+            ip_address=request.remote_addr,
+            success=False,
+        ) 
+    
         db.session.add(failed_record)
         db.session.commit()
 
@@ -129,27 +133,7 @@ def refresh():
 ### Endpoint Historial de Inicio de Sesión (Ejercicio Extra 3)
 @auth_bp.route("/login-history", methods=["GET"])
 @jwt_required()
+@admin_required
 def get_login_history():
-#Validamos el rol de administrador usando los claims del token JWT
-    claims = get_jwt()
-    if claims.get("role") != "admin":
-        return (
-            jsonify(
-                {
-                    "error": ("Acceso denegado. Se requieren privilegios de"" administrador.")
-                }
-            ),
-            403,
-        )
-
-#Filtrar por un usuario especifico mediante query params 
-    target_user_id = request.args.get("user_id")
-
-    if target_user_id:
-        history_records = LoginHistory.query.filter_by(
-            user_id=target_user_id
-        ).all()
-    else:
-        history_records = LoginHistory.query.all()
-
-    return jsonify([record.serialize() for record in history_records]), 200
+    history = LoginHistory.query.all()
+    return jsonify([h.serialize() for h in history]), 200
