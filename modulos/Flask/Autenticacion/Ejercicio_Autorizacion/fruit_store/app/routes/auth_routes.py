@@ -1,8 +1,6 @@
 # login_password.py
 from app import db
-from app.models.loginhistory import (  # Asegúrate de importar tu modelo LoginHistory
-    LoginHistory,
-)
+from app.models.loginhistory import (LoginHistory,)
 from app.models.user import User
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import (
@@ -15,48 +13,42 @@ from flask_jwt_extended import (
 
 auth_bp = Blueprint("auth", __name__)
 
-
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
     email = data.get("email")
     password = data.get("password")
 
-    # Simulación u obtención de la IP del cliente
+    #Simulacion u obtencion de la IP del cliente
     client_ip = request.remote_addr or "127.0.0.1"
 
-    # 1. Buscamos al usuario en la base de datos por su email
+    #Buscamos al usuario en la base de datos por su email
     user = User.query.filter_by(email=email).first()
 
-    # 2. Verificamos si el usuario existe y si la contraseña es correcta
+    #Verificamos si el usuario existe y si la contraseña es correcta
     if not user or not user.check_password(password):
-        # Si al menos el usuario existe, guardamos el intento fallido asociado a su ID
+    # Si al menos el usuario existe, guardamos el intento fallido asociado a su ID
         if user:
             failed_record = LoginHistory(user_id=user.id, ip_address=client_ip, success=False)
         db.session.add(failed_record)
         db.session.commit()
 
-        return jsonify({"error": "Credenciales inválidas"}), 401
+        return jsonify({"error": "Credenciales invalidas"}), 401
 
-    # ==========================================
-    # SI EL LOGIN ES EXITOSO
-    # ==========================================
-    success_record = LoginHistory(
-        user_id=user.id, ip_address=client_ip, success=True
-    )
+
+    #SI EL LOGIN ES EXITOSO
+    success_record = LoginHistory(user_id=user.id, ip_address=client_ip, success=True)
     db.session.add(success_record)
     db.session.commit()
 
-    # 3. Creamos los claims adicionales con el rol del usuario (Admin o User)
+    #Creamos los claims adicionales con el rol del usuario (Admin o User)
     additional_claims = {"role": user.role}
 
-    # 4. Generamos los tokens utilizando RS256
-    access_token = create_access_token(
-        identity=str(user.id), additional_claims=additional_claims
-    )
+    #Generamos los tokens utilizando RS256
+    access_token = create_access_token(identity=str(user.id), additional_claims=additional_claims)
     refresh_token = create_refresh_token(identity=str(user.id))
 
-    # 5. Retornamos los tokens al cliente
+    #Retornamos los tokens al cliente
     return (
         jsonify({
             "access_token": access_token,
@@ -67,20 +59,20 @@ def login():
     )
 
 
-    # 6. Ruta de Registro para crear usuarios o administradores
+    #Ruta de Registro para crear usuarios o administradores
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
-    # Por defecto será 'user' a menos que especifiques 'admin'
+    #Por defecto user
     role = data.get("role", "user")
 
     if not username or not email or not password:
         return jsonify({"error": "El email y la contraseña son obligatorios"}), 400
 
-    # Verificar si el usuario ya existe
+    #Verificar si el usuario ya existe
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
         return jsonify({"error": "El correo ya está registrado"}), 400
@@ -117,47 +109,40 @@ def get_current_user():
     user = User.query.get_or_404(current_user_id)
     return jsonify(user.serialize()), 200
 
-
-    ########## Endpoint Refresh-token (ejercicio extra 2.)
+##### Endpoint Refresh-token (ejercicio extra 2.)
 @auth_bp.route("/refresh-token", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
     current_user_id = get_jwt_identity()
-    # Buscamos al usuario para asegurarnos de que sigue activo/existe
+    #Buscamos al usuario para asegurarnos de que sigue activo/existe
     user = User.query.get(current_user_id)
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
 
-    # 3. Creamos los claims
+    #Creamos los claims
     additional_claims = {"role": user.role}
-    # 4. Generamos UN NUEVO Access Token
-    new_access_token = create_access_token(
-        identity=str(user.id), additional_claims=additional_claims
-    )
+    #Generamos UN NUEVO Access Token
+    new_access_token = create_access_token(identity=str(user.id), additional_claims=additional_claims)
 
     return jsonify({"access_token": new_access_token}), 200
 
-
-    ########## Endpoint Historial de Inicio de Sesión (Ejercicio Extra 3)
+### Endpoint Historial de Inicio de Sesión (Ejercicio Extra 3)
 @auth_bp.route("/login-history", methods=["GET"])
 @jwt_required()
 def get_login_history():
-# Validamos el rol de administrador usando los claims del token JWT
+#Validamos el rol de administrador usando los claims del token JWT
     claims = get_jwt()
     if claims.get("role") != "admin":
         return (
             jsonify(
                 {
-                    "error": (
-                        "Acceso denegado. Se requieren privilegios de"
-                        " administrador."
-                    )
+                    "error": ("Acceso denegado. Se requieren privilegios de"" administrador.")
                 }
             ),
             403,
         )
 
-# Opcional: Filtrar por un usuario específico mediante query params (ej. /login-history?user_id=2)
+#Filtrar por un usuario especifico mediante query params 
     target_user_id = request.args.get("user_id")
 
     if target_user_id:

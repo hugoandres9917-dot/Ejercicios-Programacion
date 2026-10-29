@@ -17,11 +17,11 @@ class User(db.Model):
     
     invoices: Mapped[List["Invoice"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     contacts: Mapped[List["Contact"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    # Método para encriptar y guardar la contraseña
+    #Metodo para encriptar y guardar la contraseña
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
-    # Método para verificar si la contraseña coincide al hacer Login
+    #Metodo para verificar si la contraseña coincide al hacer Login
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     

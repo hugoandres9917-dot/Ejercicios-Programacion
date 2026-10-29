@@ -34,7 +34,7 @@ def create_contact():
     email = data.get("email")
     
     if not name or not phone or not email:
-        return jsonify({"error": "El nombre, el teléfono y el correo son obligatorios"}), 400
+        return jsonify({"error": "El nombre, el telefono y el correo son obligatorios"}), 400
     
     new_contact = Contact(
         name=name,
@@ -61,7 +61,7 @@ def update_contact(id):
     role = claims.get("role")
     
     contact = Contact.query.get_or_404(id)
-    # Validar permisos: Usuario normal solo edita lo suyo. Admin puede editar (o restringes si prefieres).
+    # Validar permisos: Usuario normal solo edita lo suyo. Admin puede editar 
     if role != "admin" and contact.user_id != current_user_id:
         return jsonify({"error": "No tienes permisos para modificar este contacto"}), 403
     
@@ -86,7 +86,7 @@ def delete_contact(id):
     role = claims.get("role")
 
     contact = Contact.query.get_or_404(id)
-    # Regla estricta del ejercicio: Admin puede eliminar cualquiera, usuario solo los suyos
+    #Admin puede eliminar cualquiera, usuario solo los suyos
     if role != "admin" and contact.user_id != current_user_id:
         return jsonify({"error": "No tienes permisos para eliminar este contacto"}), 403
 

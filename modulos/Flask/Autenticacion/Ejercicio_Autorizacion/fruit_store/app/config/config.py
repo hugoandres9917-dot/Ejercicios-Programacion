@@ -12,7 +12,7 @@ class Config:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-# Configuración de JWT para usar RS256
+#Configuracion de JWT para usar RS256
     JWT_ALGORITHM = 'RS256'
     
     private_key_path = os.path.join(BASE_DIR, "keys", "private_key.pem")
