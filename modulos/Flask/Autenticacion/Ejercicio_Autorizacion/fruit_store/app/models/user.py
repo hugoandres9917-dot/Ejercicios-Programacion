@@ -16,7 +16,7 @@ class User(db.Model):
     role: Mapped[str] = mapped_column(String(100), nullable=False, default="user")
     
     invoices: Mapped[List["Invoice"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    
+    contacts: Mapped[List["Contact"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     # Método para encriptar y guardar la contraseña
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
