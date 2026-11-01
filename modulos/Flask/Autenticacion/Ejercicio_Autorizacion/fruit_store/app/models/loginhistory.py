@@ -13,7 +13,7 @@ class LoginHistory(db.Model):
     __tablename__ = "login_history"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)#Asocia con la tabla  Users
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)  # Cambio a true para permitir logins fallidos sin usuario
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     ip_address = db.Column(db.String(45), nullable=False)  # Almacena IP 
     success = db.Column(db.Boolean, nullable=False) 
