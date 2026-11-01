@@ -1,4 +1,5 @@
-#invoice_routes.py RUTAS DE FACTURAS Y COMPRAS 
+#invoice_routes.py
+# RUTAS DE FACTURAS Y COMPRAS 
 
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -22,7 +23,7 @@ def buy_product():
     quantity = data.get("quantity")
     
     if not product_id or not quantity or quantity <= 0:
-        return jsonify({"error": "Se requiere 'product_id' y una 'quantity' válida"}), 400
+        return jsonify({"error": "Se requiere 'product_id' y una 'quantity' valida"}), 400
         
     product = Product.query.get_or_404(product_id)
     
@@ -43,10 +44,10 @@ def buy_product():
             total_amount=total
         )
         db.session.add(new_invoice)
-    # Para obtener el ID de la factura recién creada
+    # Para obtener el ID de la factura recien creada
         db.session.flush() 
         
-        # Creamos el ítem de la factura
+    #Creamos el ítem de la factura
         detail = InvoiceDetail(
             invoice_id=new_invoice.id,
             product_id=product.id,
@@ -65,13 +66,13 @@ def buy_product():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-# 2. Consultar las facturas del cliente autenticado
+#Consultar las facturas del cliente autenticado
 @invoice_bp.route("/invoices", methods=["GET"])
 @jwt_required()
 def get_user_invoices():
     current_user_id = get_jwt_identity()
     
-# Buscamos las facturas de este usuario
+#Buscamos las facturas de este usuario
     invoices = Invoice.query.options(
     selectinload(Invoice.invoice_details)
 ).filter_by(user_id=int(current_user_id)).all()

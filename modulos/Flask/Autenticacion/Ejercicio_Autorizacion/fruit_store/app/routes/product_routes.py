@@ -1,4 +1,5 @@
-#product_routes.py RUTAS PARA CONSULTAS CRUD DE LOS PRODUCTOS 
+#product_routes.py 
+# RUTAS PARA CONSULTAS CRUD DE LOS PRODUCTOS 
 
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
@@ -9,13 +10,13 @@ from datetime import datetime
 
 product_bp = Blueprint("products", __name__)
 
-# 1. Ruta publica todos los productos de la fruteria
+#Ruta publica todos los productos de la fruteria
 @product_bp.route("/products", methods=["GET"])
 @jwt_required()
 def get_products():
     try:
         products = Product.query.all()
-        # Convertimos los productos a un formato JSON 
+    #Convertimos los productos a un formato JSON 
         product_list = [
             {
                 "id": p.id,
@@ -30,7 +31,7 @@ def get_products():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 2. Ruta PROTEGIDA (Solo Admin): Crear un nuevo producto
+#Ruta PROTEGIDA (Solo Admin): Crear un nuevo producto
 @product_bp.route("/products", methods=["POST"])
 @admin_required
 def create_product():
@@ -58,7 +59,7 @@ def create_product():
         db.session.commit()
         
         return jsonify({
-            "message": "Producto creado con éxito",
+            "message": "Producto creado con Exito",
             "product": {
                 "id": new_product.id,
                 "name": new_product.name,
@@ -72,7 +73,7 @@ def create_product():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
     
-# 3. Ruta PÚBLICA: Ver un solo producto por ID
+# 3. Ruta PuBLICA: Ver un solo producto por ID
 @product_bp.route("/products/<int:id>", methods=["GET"])
 @jwt_required()
 def get_product_by_id(id):
@@ -94,7 +95,7 @@ def update_product(id):
         product.entry_date = datetime.strptime(data["entry_date"], "%Y-%m-%d").date()
         
     db.session.commit()
-    return jsonify({"message": "Producto actualizado con éxito", "product": product.serialize()}), 200
+    return jsonify({"message": "Producto actualizado con Exito", "product": product.serialize()}), 200
 
 # 5. Ruta PROTEGIDA (Solo Admin): Eliminar un producto
 @product_bp.route("/products/<int:id>", methods=["DELETE"])
@@ -103,4 +104,4 @@ def delete_product(id):
     product = Product.query.get_or_404(id)
     db.session.delete(product)
     db.session.commit()
-    return jsonify({"message": "Producto eliminado con éxito"}), 200
+    return jsonify({"message": "Producto eliminado con Exito"}), 200
