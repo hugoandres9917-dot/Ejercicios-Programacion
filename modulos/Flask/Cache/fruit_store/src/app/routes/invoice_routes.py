@@ -8,6 +8,7 @@ from app.models.product import Product
 from app.models.invoice import Invoice
 from app.models.invoice_detail import InvoiceDetail
 from sqlalchemy.orm import selectinload
+from app.redis_helper import RedisCacheHelper
 
 
 invoice_bp = Blueprint("invoices", __name__)
@@ -56,7 +57,7 @@ def buy_product():
         )
         db.session.add(detail)
         db.session.commit()
-        
+        RedisCacheHelper.invalidate_fruit_caches(fruit_id=product.id)# Invalidamos el cache de productos y del producto comprado
         return jsonify({
             "message": "Compra realizada con Exito",
             "invoice": new_invoice.serialize()

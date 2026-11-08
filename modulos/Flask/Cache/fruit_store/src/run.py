@@ -1,4 +1,5 @@
-# run # CORRE EL PROGAMA Y BASE DATOS 
+# run 
+# # CORRE EL PROGAMA Y BASE DATOS 
 
 from app import create_app
 
