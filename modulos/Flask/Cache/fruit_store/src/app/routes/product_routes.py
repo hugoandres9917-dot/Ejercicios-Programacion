@@ -56,16 +56,21 @@ def get_product_by_id(id):
             return jsonify(cached_product), 200
 
         # 2. Consultar la Base de Datos
-        product = Product.query.get_or_404(id)
+        product = Product.query.get(id)
+        if not product:
+            return jsonify({"error": "Producto no encontrado"}), 404
+
         result = product.serialize()
         
         # 3. Guardar en caché específico
         RedisCacheHelper.set_cache(cache_key, result, 300)
         
         return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"error": "Producto no encontrado o error en servidor", "details": str(e)}), 404
 
+    except Exception as e:
+        # Si llegamos aquí, es un error inesperado de servidor/base de datos, no un 404
+        print(f"Error interno en get_product_by_id: {e}")
+        return jsonify({"error": "Error interno del servidor", "details": str(e)}), 500
 #Ruta PROTEGIDA (Solo Admin): Crear un nuevo producto
 @product_bp.route("/products", methods=["POST"])
 @admin_required
@@ -117,11 +122,14 @@ def create_product():
 @product_bp.route("/products/<int:id>", methods=["PUT"])
 @admin_required
 def update_product(id):
-    product = Product.query.get_or_404(id)
+    product = Product.query.get(id)
     data = request.get_json()
     if not data:
         return jsonify({"error": "Cuerpo de la peticion vacio"}), 400
     
+    if not product:
+        return jsonify({"error": "Producto no encontrado"}), 404
+
     try:
         if "name" in data:
             product.name = data["name"]
@@ -150,7 +158,9 @@ def update_product(id):
 @product_bp.route("/products/<int:id>", methods=["DELETE"])
 @admin_required
 def delete_product(id):
-    product = Product.query.get_or_404(id)
+    product = Product.query.get(id)
+    if not product:
+        return jsonify({"error": "Producto no encontrado"}), 404
     try:
         db.session.delete(product)
         db.session.commit()
