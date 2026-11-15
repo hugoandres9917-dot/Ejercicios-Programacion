@@ -12,17 +12,16 @@ from sqlalchemy.exc import IntegrityError
 
 product_bp = Blueprint("products", __name__)
 
-#Ruta publica todos los productos de la fruteria /// con cache
+#Ruta publica todos los productos de la fruteria 
 @product_bp.route("/products", methods=["GET"])
 @jwt_required()
 def get_products():
     try:
         # Intentamos obtener los productos desde el cache de Redis
-        cached_products = RedisCacheHelper.get_cache("fruits_all")
+        cached_products = RedisCacheHelper.get_cache("fruits:all")
         if cached_products:
             return jsonify(cached_products), 200
         
-        # Si no hay cache, obtenemos los productos desde la base de datos
         products = Product.query.all()
     #Convertimos los productos a un formato JSON 
         product_list = [
@@ -31,19 +30,22 @@ def get_products():
                 "name": p.name,
                 "price": p.price,
                 "stock": p.stock,
-                "entry_date": p.entry_date.strftime("%Y-%m-%d") if p.entry_date else None
+                "entry_date": (p.entry_date.strftime("%Y-%m-%d") if p.entry_date else None) 
             }
             for p in products
         ]
         
-        # Guardamos los productos en el cache de Redis por 5 minutos (300 segundos)
-        RedisCacheHelper.set_cache("fruits_all", product_list, expiration=300)
+#Guardamos los productos en el cache de Redis por 10 minutos (600 segundos)
+#parte 1:Cache con expiración automática por fruta
+#parte 2: Cache por listado completo y fruta individual
+        
+        RedisCacheHelper.set_cache("fruits:all", product_list, expiration=600)
         
         return jsonify(product_list), 200
     except Exception as e:
         return jsonify({"error": "Error interno del servidor", "details": str(e)}), 500
     
-    # GET: Obtener un solo producto por ID (Con Cache Especifico) ---
+    # GET: Obtener un solo producto por ID (Con Cache Especifico) 
 @product_bp.route("/products/<int:id>", methods=["GET"])
 @jwt_required()
 def get_product_by_id(id):
@@ -62,8 +64,8 @@ def get_product_by_id(id):
 
         result = product.serialize()
         
-        # 3. Guardar en caché específico
-        RedisCacheHelper.set_cache(cache_key, result, 300)
+        # 3. Guardar en caché específico 10 mminutos
+        RedisCacheHelper.set_cache(cache_key, result, 600)
         
         return jsonify(result), 200
 
@@ -106,8 +108,7 @@ def create_product():
         
         return jsonify({
             "message": "Producto creado con Exito",
-            "product": new_product.serialize()
-        }), 201
+            "product": new_product.serialize()}), 201
         
     except ValueError:
         return jsonify({"error": "Formato de fecha inválido. Utilice YYYY-MM-DD"}), 400
