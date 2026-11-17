@@ -1,6 +1,14 @@
 #product_routes.py 
 # RUTAS PARA CONSULTAS CRUD DE LOS PRODUCTOS 
 
+
+#respuesta  a Explique qué ventaja tiene esto frente a mantener el caché indefinidamente
+
+#optimizacion y prevencion de saturacion de memoria RAM, sin expiracion, los registros obsoletos no se acumularian y se mantendria la memoria RAM en un estado optimo, evitando saturacion de memoria y posibles caidas del sistema.
+#frescura y consistencia de los datos
+#aunque invalide manualmente el cache al modificar registros al expirar a los 10 minutos el sistema se autoactualiza de forma natural
+#no sube ni productos ni precios desactualizados 
+
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from app import db
@@ -17,13 +25,14 @@ product_bp = Blueprint("products", __name__)
 @jwt_required()
 def get_products():
     try:
-        # Intentamos obtener los productos desde el cache de Redis
+        # ejercicio extra part 3: 
+        #comprobrar existencia en cache antes de consultar la base de datos
         cached_products = RedisCacheHelper.get_cache("fruits:all")
         if cached_products:
             return jsonify(cached_products), 200
-        
+        #si noexiste en cache, consultamos la base de datos
         products = Product.query.all()
-    #Convertimos los productos a un formato JSON 
+        #Convertimos los productos a un formato JSON 
         product_list = [
             {
                 "id": p.id,
@@ -35,9 +44,9 @@ def get_products():
             for p in products
         ]
         
-#Guardamos los productos en el cache de Redis por 10 minutos (600 segundos)
-#parte 1:Cache con expiración automática por fruta
-#parte 2: Cache por listado completo y fruta individual
+        #Guardamos los productos en el cache de Redis por 10 minutos (600 segundos)
+        #parte 1:Cache con expiración automática por fruta
+        #parte 2: Cache por listado completo y fruta individual
         
         RedisCacheHelper.set_cache("fruits:all", product_list, expiration=600)
         
@@ -52,27 +61,28 @@ def get_product_by_id(id):
     try:
         cache_key = f"fruit:{id}"
         
-        # 1. Intentar obtener del cache especifico
+        # comprobrar existencia en cache antes de consultar la base de datos
+        
         cached_product = RedisCacheHelper.get_cache(cache_key)
         if cached_product:
             return jsonify(cached_product), 200
 
-        # 2. Consultar la Base de Datos
+        #Consultar la Base de Datos si no existe en cache
         product = Product.query.get(id)
         if not product:
             return jsonify({"error": "Producto no encontrado"}), 404
 
         result = product.serialize()
         
-        # 3. Guardar en caché específico 10 mminutos
+        #Guardar en caché específico 10 mminutos
         RedisCacheHelper.set_cache(cache_key, result, 600)
         
         return jsonify(result), 200
 
     except Exception as e:
-        # Si llegamos aquí, es un error inesperado de servidor/base de datos, no un 404
         print(f"Error interno en get_product_by_id: {e}")
         return jsonify({"error": "Error interno del servidor", "details": str(e)}), 500
+    
 #Ruta PROTEGIDA (Solo Admin): Crear un nuevo producto
 @product_bp.route("/products", methods=["POST"])
 @admin_required
