@@ -33,6 +33,6 @@ class RedisCacheHelper:
         
     @staticmethod
     def invalidate_fruit_caches(fruit_id=None):
-        RedisCacheHelper.delete_cache("fruits_all")
+        RedisCacheHelper.delete_cache("fruits:all")
         if fruit_id:
             RedisCacheHelper.delete_cache(f"fruit:{fruit_id}")                
